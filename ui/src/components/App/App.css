@@ -1,0 +1,263 @@
+.App {
+    text-align: center;
+  }
+ 
+  
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.previewFile {
+  text-align: left;
+}
+
+.buttons-index {
+  padding: 10px;
+}
+
+/* Load report */
+.list-files {
+  text-align: left;
+}
+
+.list-file-item {
+  padding: 5px;
+  /*display: block;*/
+}
+
+.list-file-item:hover {
+  text-decoration: underline;
+}
+
+
+.title {
+  font-size: large;
+  margin: 20px;
+  padding-left: 15px;
+}
+
+.objectives, .team, .emergency-contacts, .vehicles, .equipment, .mission-logbook, .action-items, .final-remarks, .weather {
+  text-align: left;
+  padding: 10px;
+}
+
+.CodeMirror-scroll {
+  min-height: 150px !important;
+}
+
+.checkbox-wrap {
+  padding: 15px;
+  display: inline-block;
+}
+
+.team-selected {
+  font-weight: normal;
+}
+
+/* Table */
+.vehicles-table, .missionLog-table  {
+  border-width: 2px;
+  border-color: #ddd;
+  border-style: solid;
+  width: 100%;
+}
+
+.vehicles-table tr:nth-child(even){
+  background-color: #f2f2f2;
+}
+
+.vehicles-table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: #4CAF50;
+  color: white;
+}
+
+.vehicles-table td .vehicle-input{
+  padding-top: 12px !important; 
+  padding-bottom: 12px !important;
+  text-align: left !important;
+}
+
+.missionLog-table td {
+  padding-top: 12px !important; 
+  padding-bottom: 12px !important;
+  border: 1px solid #ddd;
+}
+
+.missionLog-table-time {
+  width: 10%;
+  text-align: center !important;
+}
+
+.missionLog-table-description {
+  text-align: left !important;
+}
+
+.vehicles-table tr td .vehicle-input:nth-child(even){
+  background-color: #f2f2f2;
+}
+
+.input-addMisisonLog {
+  width: 85%;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.button-addMissionLog {
+  width: 10%;
+  float: right;
+  padding-top: 12px;
+  padding-bottom: 12px
+}
+
+
+
+select {
+  width: 100%;
+  font-size: initial;
+}
+
+.vehicle-input {
+  position: relative;
+  display: block;
+  top: 0;
+  left: 0;
+  height: 100%;
+  margin: 0;
+  width: 100%;
+  border: none;
+  padding: 2px;
+  box-sizing: border-box;
+}
+
+.equipment-input, .action-input {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  width: 15%;
+}
+
+.image-wraper {
+  border: 2px dashed lightgray;
+  height: auto;
+  text-align: center;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.image-btn {
+  padding: 25px;
+}
+
+.input-file-label {
+  border: none;
+  padding: 10px;
+  background-color: lightgray;
+  border-radius: 10px;
+}
+
+.weatherHint, .tidesHint {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+
+.wrapper {
+  display: inline-block;
+  overflow: hidden;
+}
+
+
+.template1 {
+  float: left;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  width: 400px;
+  border: 1px solid #000;
+}
+
+.template2 {
+  background-color: white;
+  width: 400px;
+  overflow: hidden;
+  min-height: 500px;
+  border: 1px solid #000;
+}
+
+@media screen and (max-width: 400px){
+  .template1 {
+    float: none;
+    margin-right: 0;
+    width: auto;
+    border: 1px solid #000;
+  }
+}
+
+.template-img {
+  width: 400px;
+  height: 500px;
+}
+
+.template-img:hover {
+  opacity: 0.5;
+}
+
+
+
+.prompt-filename {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 500px;
+  height: 250px;
+  z-index: 999;
+  padding: 10px;
+  text-align: left;
+  background-color: white;
+  border-radius: 5px;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.3); /* IE */
+  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.3);
+}
+
+.prompt-input {
+  padding: 10px;
+  width: -webkit-fill-available;
+  margin-top: 10px;
+}
+
+.prompt-btns {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 10px;
+}
+
+.prompt-close {
+  padding: 5px;
+  margin-right: 10px;
+  font-size: medium;
+}
+
+.prompt-create {
+  padding: 5px;
+  font-size: medium;
+}
+
+.tooltip {
+  color: red;
+  font-size: small;
+}
+
+
