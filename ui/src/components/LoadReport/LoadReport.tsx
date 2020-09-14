@@ -22,7 +22,7 @@ const LoadReport: React.FC = () => {
 
     const handleClickFile = async (fileName: string) => {
 
-        const data = await fetch('http://localhost:3001/file/' + fileName);
+        const data = await fetch('http://10.0.1.109:3001/file/' + fileName);
         const fileContent = await data.text();
 
         setFile(fileContent);
@@ -47,31 +47,31 @@ const LoadReport: React.FC = () => {
         const template = await dataFetched.text();
 
         console.log('Load template -> ' + template);
-        if(template === 'template_1'){
-            history.push('/createReport/' + fileName); 
+        if (template === 'template_1') {
+            history.push('/createReport/' + fileName);
         }
-        else if(template === 'template_2'){
-            history.push('/createReport_2/' + fileName); 
+        else if (template === 'template_2') {
+            history.push('/createReport_2/' + fileName);
         }
         else {
             alert('template not found');
         }
     }
 
-    
+
     return (
         <div className="buttons-index">
 
             <div className="list-files">
                 <ul>
-                {
-                    data.map((item, index) => (
-                        <li key={index} className="list-file-item" onClick={() => handleClickFile(item.name)}>
-                            {item.name}
-                        </li>
-                        
-                    ))
-                }
+                    {
+                        data.map((item, index) => (
+                            <li key={index} className="list-file-item" onClick={() => handleClickFile(item.name)}>
+                                {item.name}
+                            </li>
+
+                        ))
+                    }
                 </ul>
             </div>
 
@@ -86,6 +86,8 @@ const LoadReport: React.FC = () => {
                         </button>) : (<></>)
                 }
 
+                {file ? (<button className="download-file"> </button>) : (<></>) }
+
                 {
                     file ?
                         (<ReactMarkdown source={file} />)
@@ -94,7 +96,7 @@ const LoadReport: React.FC = () => {
 
             </div>
 
-            
+
 
 
         </div>

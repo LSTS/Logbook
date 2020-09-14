@@ -53,10 +53,10 @@ router.get('/exist/:fileName', function (req, res, next) {
     var filePath = path.join('../api/markdownFiles/', req.params.fileName);
     try {
         if (fs.existsSync(filePath)) {
-            res.send({ result: true });
+            res.json({ result: true });
         }
         else {
-            res.send({ result: false });
+            res.json({ result: false });
         }
     }
     catch (err) {

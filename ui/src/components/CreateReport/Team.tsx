@@ -1,28 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { presentTeamMembers } from '../../lib/utils';
+
+import teamOptions from '../data/team.json';
 
 interface Props {
     onChange: any;
     teamSelected: string[];
 }
 
-interface IMembers {
-    name: string;
-    isChecked: boolean;
-}
 
 const Team: React.FC<Props> = (props: Props) => {
 
     /*
-    const team = [
-        { name: "member1" },
-        { name: "member2" },
-        { name: "member3" },
-        { name: "member4" },
-        { name: "member5" }
-    ]
-    */
-
     const [teamOptions, setTeamOptions] = useState([]);
 
     useEffect(() => {
@@ -38,6 +27,7 @@ const Team: React.FC<Props> = (props: Props) => {
                 }
             )
     }
+    */
 
 
     // present team selected
@@ -70,7 +60,6 @@ const Team: React.FC<Props> = (props: Props) => {
                                 checked={props.teamSelected.includes(member)} />
 
                             {member}
-
                             
                         </label>
 
@@ -80,7 +69,6 @@ const Team: React.FC<Props> = (props: Props) => {
 
         </div>
     );
-
 }
 
 export default Team;

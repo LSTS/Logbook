@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react';
+
+import equipmentOptions from '../data/equipment.json';
 
 interface Props {
     onChangeEquipment: any;
@@ -7,8 +9,6 @@ interface Props {
 }
 
 const Equipment: React.FC<Props> = (props: Props) => {
-
-
 
     //received from server side json
     /*
@@ -22,7 +22,7 @@ const Equipment: React.FC<Props> = (props: Props) => {
     ];
     */
 
-
+    /*
     const [equipmentOptions, setEquipmentOptions] = useState([]);
 
     useEffect(() => {
@@ -38,6 +38,7 @@ const Equipment: React.FC<Props> = (props: Props) => {
                 }
             )
     }
+    */
 
 
 

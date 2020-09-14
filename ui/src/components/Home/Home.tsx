@@ -9,15 +9,8 @@ const Home: React.FC = () => {
     let history = useHistory();
 
     const [promptVisible, setPromptVisible] = useState<boolean>(false);
-    const [reportFilename,setReportFilename] = useState<string>('');
-    
-
-    const handleChangeFilename = (value: any) => {
-        setReportFilename(value.target.value);
-    }
 
     const handleClosePrompt = () => {
-        setReportFilename('');
         setPromptVisible(false);
     }
     
@@ -56,9 +49,8 @@ const Home: React.FC = () => {
         else {
             setPromptVisible(true);
         }
-
     }
-
+    
     // if only use one state
     /*
     const newTo = {
@@ -92,19 +84,17 @@ const Home: React.FC = () => {
             <div className="wrapper" >
 
                 <div className="template1">
-                    <img className="template-img" src="http://localhost:3001/image/template1.jpg" alt="template_1" onClick={handleTemplateClick} />
+                    <img className="template-img" src={process.env.PUBLIC_URL + '/template1.jpg'} alt="template_1" onClick={handleTemplateClick} />
                 </div>
 
                 <div className="template2">
-                    <img className="template-img" src="http://localhost:3001/image/template2.jpg" alt="template_2" onClick={handleTemplateClick} />
+                    <img className="template-img" src={process.env.PUBLIC_URL + '/template2.jpg'} alt="template_2" onClick={handleTemplateClick} />
                 </div>
 
             </div>
 
             {promptVisible ? 
             (<CustomPrompt 
-                fileName={reportFilename} 
-                onChangeFile={handleChangeFilename}
                 onClose={handleClosePrompt}/>) 
             : 
             (<></>) }

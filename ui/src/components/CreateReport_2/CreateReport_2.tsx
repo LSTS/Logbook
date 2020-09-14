@@ -139,8 +139,8 @@ class CreateReport_2 extends React.Component<Props, State> {
 
 
     componentWillUnmount() {
-        console.log('close connections');
-        socket.close();
+        //console.log('close connections');
+        //socket.close();
     }
 
 

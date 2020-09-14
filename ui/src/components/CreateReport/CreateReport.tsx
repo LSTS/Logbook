@@ -131,8 +131,8 @@ class CreateReport extends React.Component<Props, State> {
 
 
     componentWillUnmount() {
-        console.log('close connections');
-        socket.close();
+        //console.log('close connections');
+        //socket.close();
     }
 
 
@@ -594,7 +594,6 @@ class CreateReport extends React.Component<Props, State> {
     handleAddEquipment() {
         let equipment = [...this.state.equipment, ''];
         this.setState({ equipment }, this.handleSocketUpdate);
-
     }
 
 

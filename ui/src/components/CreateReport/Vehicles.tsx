@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react';
+
+import vehicleOptions from '../data/vehicles.json';
 
 interface Props {
     onChangeVehicle: any;
@@ -23,19 +25,6 @@ const Vehicle: React.FC<Props> = (props: Props) => {
 
     //received from server side json
     /*
-    const vehicleOptions = [
-        { name: 'Vehicle1' },
-        { name: 'Vehicle2' },
-        { name: 'Vehicle3' },
-        { name: 'Vehicle4' },
-        { name: 'Vehicle5' },
-        { name: 'Vehicle6' },
-        { name: 'Vehicle7' },
-        { name: 'Vehicle8' },
-        { name: 'Vehicle9' }
-    ];
-    */
-
     const [vehicleOptions, setVehicleOptions] = useState([]);
 
     useEffect(() => {
@@ -52,8 +41,7 @@ const Vehicle: React.FC<Props> = (props: Props) => {
                 }
             )
     }
-
-
+    */
 
 
     return (
