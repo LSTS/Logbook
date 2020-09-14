@@ -22,7 +22,7 @@ const LoadReport: React.FC = () => {
 
     const handleClickFile = async (fileName: string) => {
 
-        const data = await fetch('http://10.0.1.109:3001/file/' + fileName);
+        const data = await fetch('http://localhost:3001/file/' + fileName);
         const fileContent = await data.text();
 
         setFile(fileContent);
