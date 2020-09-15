@@ -21,7 +21,7 @@ export function getCurrentTime() {
 
 export function presentTeamMembers(teamSelected: string[]) {
 
-    if (teamSelected.length > 0) {
+    if (teamSelected.length > 0 && teamSelected[0].length > 0) {
 
         let presentString = "";
         teamSelected.forEach((member, index) => {

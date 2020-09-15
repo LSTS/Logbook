@@ -36,6 +36,10 @@
   text-decoration: underline;
 }
 
+.button-load-report, .button-create-report{
+  margin: 10px;
+  padding: 10px;
+}
 
 .title {
   font-size: large;
@@ -139,10 +143,14 @@ select {
   box-sizing: border-box;
 }
 
-.equipment-input, .action-input {
+.equipment-input, .action-input, .team-input {
   padding-top: 12px;
   padding-bottom: 12px;
   width: 15%;
+}
+
+.action-input {
+  width: 40%;
 }
 
 .image-wraper {
@@ -258,6 +266,25 @@ input[type="file"] {
 .tooltip {
   color: red;
   font-size: small;
+}
+
+.location-input {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-right: 10px;
+  font-size: smaller;
+
+}
+
+.data-input {
+  margin-left: 5px;
+}
+
+.delete-team {
+  position: absolute;
+  background: none;
+  border: none;
+  margin-left: -3px;
 }
 
 

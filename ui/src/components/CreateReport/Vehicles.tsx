@@ -46,7 +46,7 @@ const Vehicle: React.FC<Props> = (props: Props) => {
 
     return (
         <div className="vehicles">
-            <h4 className="title"> AUVs </h4>
+            <h4 className="title"> Systems </h4>
             <table className="vehicles-table">
                 <tbody className="vehicles-body">
 

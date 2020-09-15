@@ -4,7 +4,7 @@ interface Props {
     onAddMissionLog: any;
 
     missionLog: {
-        time: String,
+        time: string,
         description: string
     }[]
 }

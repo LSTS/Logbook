@@ -21,7 +21,7 @@ const LoadReport: React.FC = () => {
     let history = useHistory();
 
     const handleClickFile = async (fileName: string) => {
-
+        //../api/routes/file
         const data = await fetch('http://localhost:3001/file/' + fileName);
         const fileContent = await data.text();
 
@@ -31,7 +31,7 @@ const LoadReport: React.FC = () => {
 
     const listFiles = async () => {
         const dataFetched = await fetch('http://localhost:3001/file/');
-
+        
         const files = await dataFetched.text();
 
         var json = JSON.parse(files);
@@ -41,7 +41,7 @@ const LoadReport: React.FC = () => {
 
 
     const handleEditFile = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-
+        /*
         //check file template
         const dataFetched = await fetch('http://localhost:3001/file/type/' + fileName);
         const template = await dataFetched.text();
@@ -55,7 +55,9 @@ const LoadReport: React.FC = () => {
         }
         else {
             alert('template not found');
-        }
+        }*/
+
+        history.push('/createReport/' + fileName);
     }
 
 
@@ -86,7 +88,7 @@ const LoadReport: React.FC = () => {
                         </button>) : (<></>)
                 }
 
-                {file ? (<button className="download-file"> </button>) : (<></>) }
+                {/*file ? (<button className="download-file"> Download </button>) : (<></>) */}
 
                 {
                     file ?

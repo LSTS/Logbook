@@ -18,6 +18,7 @@ const Objectives: React.FC<Props> = (props: Props) => {
                 onChange={props.onChange}
                 value={props.value} 
                 options = {{ 
+                    forceSync: true,
                     spellChecker: false
                 }}/>
 

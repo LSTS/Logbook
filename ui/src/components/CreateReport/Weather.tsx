@@ -23,7 +23,7 @@ const Weather: React.FC<Props> = (props: Props) => {
                         <img alt="weather" src={props.img} />
                     </div>)
                     :
-                    (<p className="weatherHint"> &lt;Snapshot from https://www.windguru.cz&gt;  </p>)
+                    (<p className="weatherHint"> &lt;Snapshot from https://www.tide-forecast.com&gt; </p>)
                 }
             </div>
 

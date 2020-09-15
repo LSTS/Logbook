@@ -6,7 +6,6 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import HomePage from '../Home/Home'
 import LoadReport from '../LoadReport/LoadReport'
 import CreateReport from '../CreateReport/CreateReport'
-import CreateReport_2 from '../CreateReport_2/CreateReport_2'
 
 
 const App: React.FC = () => {
@@ -25,7 +24,6 @@ const App: React.FC = () => {
                     <Route path="/" exact component={HomePage} />
                     <Route path="/loadReport" component={LoadReport} onLeave={handleExit}/>
                     <Route path="/createReport" component={CreateReport} />
-                    <Route path="/createReport_2" component={CreateReport_2} />
                 </Switch>
     
             </div>

@@ -11,6 +11,7 @@ import Equipment from './Equipment';
 import MissionLogbook from './MissionLogbook';
 import ActionItems from './ActionItems';
 import FinalRemarks from './FinalRemarks';
+import Weather from './Weather';
 
 import { Redirect } from 'react-router-dom'
 import socketIOClient from 'socket.io-client'
@@ -28,7 +29,7 @@ interface IVehicle {
     emergency_pinger: string
 }
 
-interface Props { 
+interface Props {
     location: any;
 }
 
@@ -38,6 +39,8 @@ interface State {
 
     currentDate: string;
     firstRender: boolean;
+
+    location: string;
 
     mdeValueObjectives?: any;
 
@@ -59,6 +62,8 @@ interface State {
     mdeValueFinalRemarks?: any;
 
     redirect: boolean;
+
+    weatherImage: string;
 }
 
 
@@ -73,7 +78,9 @@ class CreateReport extends React.Component<Props, State> {
             currentDate: '',
             firstRender: true,
 
-            teamSelected: [],
+            location: '',
+
+            teamSelected: [''],
 
             emergencyContacts: [],
 
@@ -92,7 +99,9 @@ class CreateReport extends React.Component<Props, State> {
 
             actions: [''],
 
-            redirect: false
+            redirect: false,
+
+            weatherImage: ''
         }
 
         this.handleUpdateDate = this.handleUpdateDate.bind(this);
@@ -114,6 +123,11 @@ class CreateReport extends React.Component<Props, State> {
 
         this.shouldUpdate = this.shouldUpdate.bind(this);
 
+        this.handleWeatherFileChange = this.handleWeatherFileChange.bind(this);
+        this.handleChangeLocation = this.handleChangeLocation.bind(this);
+
+        this.handleAddTeamMember = this.handleAddTeamMember.bind(this);
+        this.handleDeleteTeamMember = this.handleDeleteTeamMember.bind(this);
 
     }
 
@@ -133,121 +147,6 @@ class CreateReport extends React.Component<Props, State> {
     componentWillUnmount() {
         //console.log('close connections');
         //socket.close();
-    }
-
-
-    handleSockets() {
-
-        socket.on('connect', () => {
-            console.log("Client connected");
-        })
-
-        /*
-        socket.on('file.changed', function (data: any) {
-            console.log('-- Filename --');
-            console.log(data.fileName);
-            console.log('-- Data --');
-            console.log(data.data);
-
-        });
-        */
-
-        socket.on('file.changed', (data: any) => {
-            if (data.fileName === this.state.fileName) {
-                //console.log("-- Updating state --");
-                //console.log(data.data);
-
-                var fileDate = data.fileName.substring(data.fileName.indexOf('debriefing_') + 11, data.fileName.length - 3);
-
-
-                if (this.state.mdeValueObjectives !== data.data.objectives || JSON.stringify(this.state.actions) !== JSON.stringify(data.data.actions) ||
-                    JSON.stringify(this.state.teamSelected) !== JSON.stringify(data.data.team) || JSON.stringify(this.state.emergencyContacts) !== JSON.stringify(data.data.emergencyContacts) ||
-                    JSON.stringify(this.state.vehicles) !== JSON.stringify(data.data.vehicles) || JSON.stringify(this.state.missionLogs) !== JSON.stringify(data.data.missionLogs) ||
-                    JSON.stringify(this.state.equipment) !== JSON.stringify(data.data.equipment) || this.state.mdeValueFinalRemarks !== data.data.finalRemarks) {
-
-                    /*    
-                    console.log("Chage state");
-
-                    console.log("previous state:");
-                    console.log(this.state.equipment);
-                    console.log("state received:");
-                    console.log(data.data.equipment);
-                    */
-
-                    this.setState({
-                        fileName: this.state.fileName,
-                        currentDate: fileDate,
-                        mdeValueObjectives: data.data.objectives,
-                        teamSelected: data.data.team,
-                        emergencyContacts: data.data.emergencyContacts,
-                        vehicles: data.data.vehicles,
-                        equipment: data.data.equipment,
-                        missionLogs: data.data.missionLogs,
-                        actions: data.data.actions,
-                        mdeValueFinalRemarks: data.data.finalRemarks
-                    })
-
-                }
-                else {
-                    //console.log("Not change state");
-                }
-            }
-            else {
-                //console.log("Ficheiro diferentes nao alterar");
-            }
-        });
-
-    }
-
-
-    shouldUpdate() {
-        console.log('---FILENAME---');
-        console.log(this.state.fileName);
-    }
-
-
-    handleSocketUpdate() {
-        let previewMarkdown = '# LogBook\n';
-        previewMarkdown += '## FEUP: ' + this.state.currentDate + '\n';
-
-        previewMarkdown += '### Objectives\n';
-        if (this.state.mdeValueObjectives === undefined) {
-            previewMarkdown += '\n';
-        }
-        else {
-            previewMarkdown += this.state.mdeValueObjectives + '\n';
-        }
-
-        previewMarkdown += '### Team\n';
-        previewMarkdown += presentTeamMembers(this.state.teamSelected) + '\n';
-
-        previewMarkdown += '### Emergency Contacts\n';
-        previewMarkdown += '* N/D\n';
-
-        previewMarkdown += '### AUVs\n';
-        previewMarkdown += presentVehicleTable(this.state.vehicles);
-
-        previewMarkdown += '### Other Equipment\n';
-        previewMarkdown += presentEquipmentList(this.state.equipment);
-
-        previewMarkdown += '### Mission LogBook\n';
-        previewMarkdown += presentLogTable(this.state.missionLogs);
-
-        previewMarkdown += '### Action Items\n';
-        previewMarkdown += presentActionList(this.state.actions);
-
-        previewMarkdown += '### Final Remarks\n';
-        if (this.state.mdeValueFinalRemarks === undefined) {
-            previewMarkdown += '';
-        }
-        else {
-            previewMarkdown += this.state.mdeValueFinalRemarks;
-        }
-
-        socket.emit('update.file', {
-            fileName: this.state.fileName,
-            previewMarkdown
-        });
     }
 
 
@@ -290,9 +189,11 @@ class CreateReport extends React.Component<Props, State> {
             this.setState({
                 fileName: fileName,
                 currentDate: fileDate,
+                location: data.location,
                 mdeValueObjectives: data.objectives,
                 teamSelected: data.team,
                 emergencyContacts: data.emergencyContacts,
+                weatherImage: data.weather,
                 vehicles: data.vehicles,
                 equipment: data.equipment,
                 missionLogs: data.missionLogs,
@@ -300,6 +201,133 @@ class CreateReport extends React.Component<Props, State> {
                 mdeValueFinalRemarks: data.finalRemarks
             })
         }
+    }
+
+
+
+
+    handleSockets() {
+
+        socket.on('connect', () => {
+            console.log("Client connected");
+        })
+
+        /*
+        socket.on('file.changed', function (data: any) {
+            console.log('-- Filename --');
+            console.log(data.fileName);
+            console.log('-- Data --');
+            console.log(data.data);
+
+        });
+        */
+
+        socket.on('file.changed', (data: any) => {
+            if (data.fileName === this.state.fileName) {
+                console.log("-- Updating state --");
+                //console.log(data.data);
+
+                var fileDate = data.fileName.substring(data.fileName.indexOf('debriefing_') + 11, data.fileName.length - 3);
+
+
+                if (this.state.location !== data.data.location || this.state.mdeValueObjectives !== data.data.objectives || JSON.stringify(this.state.actions) !== JSON.stringify(data.data.actions) ||
+                    JSON.stringify(this.state.teamSelected) !== JSON.stringify(data.data.team) || JSON.stringify(this.state.emergencyContacts) !== JSON.stringify(data.data.emergencyContacts) ||
+                    this.state.weatherImage !== data.data.weather ||
+                    JSON.stringify(this.state.vehicles) !== JSON.stringify(data.data.vehicles) || JSON.stringify(this.state.missionLogs) !== JSON.stringify(data.data.missionLogs) ||
+                    JSON.stringify(this.state.equipment) !== JSON.stringify(data.data.equipment) || this.state.mdeValueFinalRemarks !== data.data.finalRemarks) {
+
+                    /*    
+                    console.log("Chage state");
+
+                    console.log("previous state:");
+                    console.log(this.state.equipment);
+                    console.log("state received:");
+                    console.log(data.data.equipment);
+                    */
+
+                    this.setState({
+                        fileName: this.state.fileName,
+                        currentDate: fileDate,
+                        location: data.data.location,
+                        mdeValueObjectives: data.data.objectives,
+                        teamSelected: data.data.team,
+                        emergencyContacts: data.data.emergencyContacts,
+                        weatherImage: data.data.weather,
+                        vehicles: data.data.vehicles,
+                        equipment: data.data.equipment,
+                        missionLogs: data.data.missionLogs,
+                        actions: data.data.actions,
+                        mdeValueFinalRemarks: data.data.finalRemarks
+                    })
+
+                }
+                else {
+                    //console.log("Not change state");
+                }
+            }
+            else {
+                //console.log("Ficheiro diferentes nao alterar");
+            }
+        });
+
+    }
+
+
+    shouldUpdate() {
+        console.log('---FILENAME---');
+        console.log(this.state.fileName);
+    }
+
+
+    handleSocketUpdate() {
+        let previewMarkdown = '# LogBook\n';
+        previewMarkdown += '## ' + this.state.location + ': ' + this.state.currentDate + '\n';
+        //previewMarkdown += '## FEUP: ' + this.state.currentDate + '\n';
+
+        previewMarkdown += '### Objectives\n';
+        if (this.state.mdeValueObjectives === undefined) {
+            previewMarkdown += '\n';
+        }
+        else {
+            previewMarkdown += this.state.mdeValueObjectives + '\n';
+        }
+
+        previewMarkdown += '### Team\n';
+        previewMarkdown += presentTeamMembers(this.state.teamSelected) + '\n';
+
+        previewMarkdown += '### Emergency Contacts\n';
+        previewMarkdown += '* N/D\n';
+
+        previewMarkdown += '### Weather\n';
+        previewMarkdown += '![](' + this.state.weatherImage + ')\n\n';
+
+        previewMarkdown += '### Systems\n';
+        previewMarkdown += presentVehicleTable(this.state.vehicles);
+
+        previewMarkdown += '### Other Equipment\n';
+        previewMarkdown += presentEquipmentList(this.state.equipment);
+
+        previewMarkdown += '### Mission LogBook\n';
+        previewMarkdown += presentLogTable(this.state.missionLogs);
+
+        previewMarkdown += '### Action Items\n';
+        previewMarkdown += presentActionList(this.state.actions);
+
+        previewMarkdown += '### Final Remarks\n';
+        if (this.state.mdeValueFinalRemarks === undefined) {
+            previewMarkdown += '';
+        }
+        else {
+            previewMarkdown += this.state.mdeValueFinalRemarks;
+        }
+
+        console.log('Socket update');
+
+        socket.emit('update.file', {
+            fileName: this.state.fileName,
+            previewMarkdown
+        });
+
     }
 
 
@@ -331,8 +359,6 @@ class CreateReport extends React.Component<Props, State> {
 
 
 
-
-
     handleUpdateDate(time: string) {
         this.setState({
             currentDate: time,
@@ -345,7 +371,7 @@ class CreateReport extends React.Component<Props, State> {
         console.log('-----' + this.state.fileName + '-----');
 
         let previewMarkdown = '# LogBook\n';
-        previewMarkdown += '## FEUP: ' + this.state.currentDate + '\n';
+        previewMarkdown += '## ' + this.state.location + ': ' + this.state.currentDate + '\n';
 
         previewMarkdown += '### Objectives\n';
         if (this.state.mdeValueObjectives === undefined) {
@@ -361,7 +387,10 @@ class CreateReport extends React.Component<Props, State> {
         previewMarkdown += '### Emergency Contacts\n';
         previewMarkdown += '* N/D\n';
 
-        previewMarkdown += '### AUVs\n';
+        previewMarkdown += '### Weather\n';
+        previewMarkdown += '![](' + this.state.weatherImage + ')\n\n';
+
+        previewMarkdown += '### Systems\n';
         previewMarkdown += presentVehicleTable(this.state.vehicles);
 
         previewMarkdown += '### Other Equipment\n';
@@ -383,24 +412,14 @@ class CreateReport extends React.Component<Props, State> {
 
         console.log(previewMarkdown);
 
-        //Prompt test
-        /*
-        var userName = prompt("Enter your name" , "e.g. debriefing_01-01-2020.md");
-        if(userName) {
-            console.log(userName);
-        }
-        else {
-            console.log('Field cannot be empty');
-        }
-
-        */
     }
 
 
 
     async handleSaveDoc() {
         let previewMarkdown = '# LogBook\n';
-        previewMarkdown += '## FEUP: ' + this.state.currentDate + '\n';
+        previewMarkdown += '## ' + this.state.location + ': ' + this.state.currentDate + '\n';
+        //previewMarkdown += '## FEUP: ' + this.state.currentDate + '\n';
 
         previewMarkdown += '### Objectives\n';
         if (this.state.mdeValueObjectives === undefined) {
@@ -416,7 +435,7 @@ class CreateReport extends React.Component<Props, State> {
         previewMarkdown += '### Emergency Contacts\n';
         previewMarkdown += '* N/D\n';
 
-        previewMarkdown += '### AUVs\n';
+        previewMarkdown += '### Systems\n';
         previewMarkdown += presentVehicleTable(this.state.vehicles);
 
         previewMarkdown += '### Other Equipment\n';
@@ -446,23 +465,7 @@ class CreateReport extends React.Component<Props, State> {
             redirect: true
         })
 
-
         /*
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ data: previewMarkdown })
-        };
-
-        //const response = await fetch('http://localhost:3001/createFile/' + this.state.fileName, requestOptions);
-        const response = await fetch('http://localhost:3001/updateFile/' + this.state.fileName, requestOptions);
-        const data = await response.text();
-
-        console.log(data);
-
-
-        
-
         if (data === 'File updated') {
             // redirect page
             this.setState({
@@ -473,7 +476,6 @@ class CreateReport extends React.Component<Props, State> {
             alert('Cannot save changes');
         }
         */
-
     }
 
 
@@ -484,20 +486,86 @@ class CreateReport extends React.Component<Props, State> {
     }
 
 
+    //--- Location
+    handleChangeLocation(event: React.ChangeEvent<HTMLInputElement>) {
+        this.setState({
+            location: event.target.value
+        }, this.handleSocketUpdate);
+    }
+
 
     //--- Team
-    handleChangeTeam(event: React.ChangeEvent<HTMLInputElement>) {
-        const item = event.target.name;
-        const isItemChecked = event.target.checked;
+    handleChangeTeam(event: any) {
+        const elem = event.target;
+        const memberId = elem.getAttribute('data-member');
+        const value = elem.value;
 
-        let newArray = [...this.state.teamSelected, item];
+        let teamSelected = [...this.state.teamSelected];
+        teamSelected[memberId] = value;
 
-        if (!isItemChecked) {
-            newArray = newArray.filter(name => name !== item);
-        }
+        this.setState(
+            {
+                teamSelected
+            }, this.handleSocketUpdate);
 
-        this.setState({ teamSelected: newArray }, this.handleSocketUpdate);
     }
+
+    handleAddTeamMember() {
+        let teamSelected = [...this.state.teamSelected, ''];
+        this.setState(
+            {
+                teamSelected
+            }, this.handleSocketUpdate);
+    }
+
+    handleDeleteTeamMember(event: any) {
+        console.log('remove team member');
+        
+        const elemId = event.target.getAttribute('data-member');
+
+        console.log("REMOVE -> " + elemId ); 
+        
+        let teamSelected = [...this.state.teamSelected];
+        teamSelected.splice(elemId , 1);
+
+        this.setState({
+            teamSelected
+        }, this.handleSocketUpdate);
+        
+
+
+    }
+
+
+
+    //--- weather 
+    async handleWeatherFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+
+        if (event.target.files !== null) {
+
+            //send file to server
+            const formData = new FormData();
+            formData.append('image', event.target.files[0]);
+
+            const requestOptions = {
+                method: 'POST',
+                body: formData
+            };
+
+            const response = await fetch('http://localhost:3001/uploadImage/', requestOptions);
+            const data = await response.json();
+
+            if (data.message) {
+                const imageEndpoint = 'http://localhost:3001/image/' + data.fileName;
+
+                this.setState({
+                    weatherImage: imageEndpoint
+                }, this.handleSocketUpdate);
+            }
+        }
+    }
+
+
 
     //--- Vehicles
     handleAddVehicle() {
@@ -523,18 +591,11 @@ class CreateReport extends React.Component<Props, State> {
         var dataType = elem.parentElement.getAttribute('data-type');
         var value = elem.value;
 
+        /*
         console.log("ID    -> " + vehicleId);
         console.log("type  -> " + dataType);
         console.log("value -> " + value);
-
-        /*
-                var elem = event.target.parentElement;
-                var value = elem.firstChild.value;
-        
-                var dataType = elem.getAttribute('data-type');
-                var id = elem.parentElement.getAttribute('data-vehicle');
         */
-
 
         let vehicles = [...this.state.vehicles];
         let item;
@@ -632,25 +693,25 @@ class CreateReport extends React.Component<Props, State> {
             {
                 actions
             }, this.handleSocketUpdate);
-
-
     }
 
 
     //--- simpleMDE - Objectives
     handleChangeObjectives = (value: any) => {
-        this.setState({
-            mdeValueObjectives: value
-        }, this.handleSocketUpdate);
-
+        if (this.state.mdeValueObjectives !== value) {
+            this.setState({
+                mdeValueObjectives: value
+            }, this.handleSocketUpdate);
+        }
     }
 
     //--- SimpleMDE - Final Remarks
     handleChangeFinalRemarks = (value: any) => {
-        this.setState({
-            mdeValueFinalRemarks: value
-        }, this.handleSocketUpdate)
-
+        if (this.state.mdeValueFinalRemarks !== value) {
+            this.setState({
+                mdeValueFinalRemarks: value
+            }, this.handleSocketUpdate)
+        }
     }
 
 
@@ -662,7 +723,10 @@ class CreateReport extends React.Component<Props, State> {
 
                 <button onClick={this.handlePreviewDoc}>Preview</button>
 
-                <CurrentDate currentDate={this.state.currentDate} />
+                <CurrentDate
+                    currentDate={this.state.currentDate}
+                    location={this.state.location}
+                    locationChange={this.handleChangeLocation} />
 
                 <Objectives
                     onChange={this.handleChangeObjectives}
@@ -670,9 +734,15 @@ class CreateReport extends React.Component<Props, State> {
 
                 <Team
                     teamSelected={this.state.teamSelected}
-                    onChange={this.handleChangeTeam} />
+                    onChange={this.handleChangeTeam}
+                    onAddTeamMember={this.handleAddTeamMember} 
+                    onDeleteTeamMember={this.handleDeleteTeamMember}/>
 
                 <EmergencyContacts />
+
+                <Weather
+                    img={this.state.weatherImage}
+                    onChange={this.handleWeatherFileChange} />
 
                 <Vehicle
                     vehiclesList={this.state.vehicles}

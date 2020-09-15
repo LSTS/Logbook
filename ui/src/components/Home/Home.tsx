@@ -1,11 +1,16 @@
-import React, { useState } from 'react'
+/*
+import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { getCurrentDate } from '../../lib/utils';
 import CustomPrompt from './CustomPrompt';
+*/
+
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 
 const Home: React.FC = () => {
 
+    /*
     let history = useHistory();
 
     const [promptVisible, setPromptVisible] = useState<boolean>(false);
@@ -13,8 +18,9 @@ const Home: React.FC = () => {
     const handleClosePrompt = () => {
         setPromptVisible(false);
     }
+    */
     
-
+    /*
     const handleTemplateClick = async (event: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
 
         if(promptVisible){
@@ -50,6 +56,7 @@ const Home: React.FC = () => {
             setPromptVisible(true);
         }
     }
+    */
     
     // if only use one state
     /*
@@ -62,43 +69,19 @@ const Home: React.FC = () => {
     return (
         <div className="buttons-index">
 
-            <Link to={promptVisible ? "" : "/loadReport"} >
+            <Link to="/loadReport" >
                 <button className="button-load-report">
                     <span>Load report file</span>
                 </button>
             </Link>
 
-            {/*
-            <Link to={promptVisible ? "" : "/createReport"}>
+            {
+            <Link to="/createReport">
                 <button className="button-create-report" >
                     <span>Create report</span>
                 </button>
             </Link>
-            */}
-
-            <hr></hr>
-            <hr></hr>
-
-            <h3>Templates</h3>
-
-            <div className="wrapper" >
-
-                <div className="template1">
-                    <img className="template-img" src={process.env.PUBLIC_URL + '/template1.jpg'} alt="template_1" onClick={handleTemplateClick} />
-                </div>
-
-                <div className="template2">
-                    <img className="template-img" src={process.env.PUBLIC_URL + '/template2.jpg'} alt="template_2" onClick={handleTemplateClick} />
-                </div>
-
-            </div>
-
-            {promptVisible ? 
-            (<CustomPrompt 
-                onClose={handleClosePrompt}/>) 
-            : 
-            (<></>) }
-
+            }        
 
         </div>
     );
