@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown/with-html'
 import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 
 
 interface IFile {
@@ -60,6 +61,21 @@ const LoadReport: React.FC = () => {
         history.push('/createReport/' + fileName);
     }
 
+    const handleDownloadFile = async () => {
+
+        const data = await fetch('http://localhost:3001/download/' + fileName);
+        const fileContent = await data.blob();
+
+        var url = window.URL.createObjectURL(fileContent);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+ 
+    }
+
 
     return (
         <div className="buttons-index">
@@ -83,12 +99,16 @@ const LoadReport: React.FC = () => {
 
                 {
                     file ?
-                        (<button className="edit-report" onClick={handleEditFile}>
+                        (
+                        <button className="edit-report" onClick={handleEditFile}>
                             &#9998;
-                        </button>) : (<></>)
+                        </button>
+                        ) : (<></>)
                 }
 
-                {/*file ? (<button className="download-file"> Download </button>) : (<></>) */}
+                {file ? 
+                (<button className="download-file" onClick={handleDownloadFile}> Download </button>) 
+                : (<></>) }
 
                 {
                     file ?

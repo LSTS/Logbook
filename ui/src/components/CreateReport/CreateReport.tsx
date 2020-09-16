@@ -129,6 +129,11 @@ class CreateReport extends React.Component<Props, State> {
         this.handleAddTeamMember = this.handleAddTeamMember.bind(this);
         this.handleDeleteTeamMember = this.handleDeleteTeamMember.bind(this);
 
+        this.handleUpdateMissionLog = this.handleUpdateMissionLog.bind(this);
+        this.handleBlurMissionLog = this.handleBlurMissionLog.bind(this);
+
+        this.handleDeleteMissionLog = this.handleDeleteMissionLog.bind(this);
+
     }
 
     componentDidMount() {
@@ -327,7 +332,6 @@ class CreateReport extends React.Component<Props, State> {
             fileName: this.state.fileName,
             previewMarkdown
         });
-
     }
 
 
@@ -519,21 +523,17 @@ class CreateReport extends React.Component<Props, State> {
     }
 
     handleDeleteTeamMember(event: any) {
-        console.log('remove team member');
-        
+        //console.log('remove team member');
         const elemId = event.target.getAttribute('data-member');
 
-        console.log("REMOVE -> " + elemId ); 
-        
+        console.log("REMOVE -> " + elemId);
+
         let teamSelected = [...this.state.teamSelected];
-        teamSelected.splice(elemId , 1);
+        teamSelected.splice(elemId, 1);
 
         this.setState({
             teamSelected
         }, this.handleSocketUpdate);
-        
-
-
     }
 
 
@@ -667,8 +667,75 @@ class CreateReport extends React.Component<Props, State> {
 
         const missionLogs = [...this.state.missionLogs, newMissionlog];
         this.setState({ missionLogs }, this.handleSocketUpdate);
+    }
+
+    handleUpdateMissionLog(event: any) {
+        var elem = event.target;
+        var logId = elem.getAttribute('data-log-id');
+        var logType = elem.getAttribute('data-log-type');
+        var value = elem.value;
+
+        console.log('[' + logId + '] - ' + logType + ' --> ' + value);
+
+        let missionLogs = [...this.state.missionLogs];
+        let item;
+
+        if (logType === 'time') {
+            console.log('time');
+            item = {
+                ...missionLogs[logId],
+                time: value
+            }
+        }
+        else if (logType === 'description') {
+            console.log('description');
+            item = {
+                ...missionLogs[logId],
+                description: value
+            }
+        }
+        else {
+            console.log('nada');
+            item = {
+                ...missionLogs[logId]
+            }
+        }
+        missionLogs[logId] = item;
+
+        this.setState({ 
+            missionLogs 
+        }, this.handleSocketUpdate);
 
     }
+
+    handleBlurMissionLog(logId: number, value: string) {
+
+        let missionLogs = [...this.state.missionLogs];
+        let item = {
+            ...missionLogs[logId],
+            time: value
+        };
+        
+        missionLogs[logId] = item;
+        this.setState({ 
+            missionLogs 
+        }, this.handleSocketUpdate);
+    }
+
+    handleDeleteMissionLog(event: any) {
+
+        const logId = event.target.getAttribute('data-log-id');
+
+        let missionLogs = [...this.state.missionLogs];
+        missionLogs.splice(logId, 1);
+
+        this.setState({
+            missionLogs
+        }, this.handleSocketUpdate);
+        
+    }
+
+
 
     //--- Action Items
     handleUpdateAction(event: any) {
@@ -735,8 +802,8 @@ class CreateReport extends React.Component<Props, State> {
                 <Team
                     teamSelected={this.state.teamSelected}
                     onChange={this.handleChangeTeam}
-                    onAddTeamMember={this.handleAddTeamMember} 
-                    onDeleteTeamMember={this.handleDeleteTeamMember}/>
+                    onAddTeamMember={this.handleAddTeamMember}
+                    onDeleteTeamMember={this.handleDeleteTeamMember} />
 
                 <EmergencyContacts />
 
@@ -756,7 +823,10 @@ class CreateReport extends React.Component<Props, State> {
 
                 <MissionLogbook
                     missionLog={this.state.missionLogs}
-                    onAddMissionLog={this.handleMissionLog} />
+                    onAddMissionLog={this.handleMissionLog}
+                    onChangeMissionLog={this.handleUpdateMissionLog}
+                    onBlurMissionLog={this.handleBlurMissionLog} 
+                    onDeleteMissionLog={this.handleDeleteMissionLog}/>
 
                 <ActionItems
                     actionList={this.state.actions}

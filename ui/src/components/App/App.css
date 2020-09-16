@@ -123,6 +123,25 @@
   padding-bottom: 12px
 }
 
+.missionLog-input-time {
+  border: none;
+  width: 50px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.missionLog-input-description {
+  font-size: 16px;
+  border: none;
+  width: 90%;
+  margin-right: 5px;
+}
+
+.delete-log{
+  padding: 2px;
+  float: right;
+}
+
 
 
 select {
@@ -287,4 +306,11 @@ input[type="file"] {
   margin-left: -3px;
 }
 
+.time-wraper {
+  display: inline;
+}
 
+.time-hours, .time-minutes {
+  max-width: 18px;
+  padding: 7px;
+}
