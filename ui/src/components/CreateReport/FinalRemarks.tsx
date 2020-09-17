@@ -15,10 +15,12 @@ const FinalRemarks: React.FC<Props> = (props: Props) => {
             <SimpleMDE
                 id="simplemde-final-remarks"
                 onChange={props.onChange}
-                value={props.value} 
-                options = {{ 
-                    spellChecker: false
-                }}/>
+                value={props.value}
+                options={{
+                    autoDownloadFontAwesome: true,
+                    spellChecker: false,
+                    hideIcons: ["quote", "image", "side-by-side", "fullscreen", "guide"]
+                }} />
 
         </div>
     );

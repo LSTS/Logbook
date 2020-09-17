@@ -61,7 +61,7 @@
   display: inline-block;
 }
 
-.team-selected {
+.team-selected, .equipment-selected {
   font-weight: normal;
 }
 
@@ -73,7 +73,12 @@
   width: 100%;
 }
 
+/*
 .vehicles-table tr:nth-child(even){
+  background-color: #f2f2f2;
+}
+*/
+.vehicles-table tr {
   background-color: #f2f2f2;
 }
 
@@ -110,6 +115,16 @@
   background-color: #f2f2f2;
 }
 
+.delete-vehicle {
+  padding: 2px;
+}
+
+.remove-btn-cell{
+  background-color: white;
+  text-align: center;
+}
+
+/* mission */
 .input-addMisisonLog {
   width: 85%;
   padding-top: 12px;
@@ -137,12 +152,10 @@
   margin-right: 5px;
 }
 
-.delete-log{
+.delete-log {
   padding: 2px;
   float: right;
 }
-
-
 
 select {
   width: 100%;
@@ -165,7 +178,7 @@ select {
 .equipment-input, .action-input, .team-input {
   padding-top: 12px;
   padding-bottom: 12px;
-  width: 15%;
+  width: 30%;
 }
 
 .action-input {
@@ -176,6 +189,10 @@ select {
   border: 2px dashed lightgray;
   height: auto;
   text-align: center;
+}
+
+.image-weather{
+  max-width: 100%;
 }
 
 input[type="file"] {
@@ -299,7 +316,7 @@ input[type="file"] {
   margin-left: 5px;
 }
 
-.delete-team {
+.delete-team, .delete-equipment, .delete-action {
   position: absolute;
   background: none;
   border: none;

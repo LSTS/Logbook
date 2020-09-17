@@ -18,7 +18,7 @@ module.exports = function (io) {
   io.on('connection', function (socket) {
     console.log('New client connected');
 
-    
+
     socket.on('update.file', data => {
       //console.log('[SOCKET] fileName : ' + data.fileName);
       //console.log('[SOCKET] data : ' + data.previewMarkdown);
@@ -47,7 +47,7 @@ module.exports = function (io) {
 
 
 function updateFileContent(fileName, previewMarkdown) {
-  console.log('--updateFileContent--');
+  //console.log('--updateFileContent--');
 
   var filePath = path.join('../api/markdownFiles/', fileName);
 
@@ -87,7 +87,7 @@ function convertFileToJSON(data) {
   objectives = objectives.substring(0, objectives.indexOf('### Team') - 1);
 
   var team = data.substring(data.indexOf('### Team') + 9);
-  team = team.substring(0, team.indexOf('### Emergency Contacts') - 1);
+  team = team.substring(0, team.indexOf('### Emergency Procedures / Contacts') - 1);
 
   var teamObj = [];
   //var members = team.substring(0,team.length-1);
@@ -105,7 +105,7 @@ function convertFileToJSON(data) {
     }
   })
 
-  var emergencyContacts = data.substring(data.indexOf('### Emergency Contacts') + 23);
+  var emergencyContacts = data.substring(data.indexOf('### Emergency Procedures / Contacts') + 36);
   emergencyContacts = emergencyContacts.substring(0, emergencyContacts.indexOf('### Weather') - 1);
 
   var weather = data.substring(data.indexOf('### Weather') + 16);

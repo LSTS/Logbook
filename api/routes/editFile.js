@@ -49,7 +49,7 @@ function convertFileToJSON(data) {
     objectives = objectives.substring(0, objectives.indexOf('### Team') - 1);
 
     var team = data.substring(data.indexOf('### Team') + 9);
-    team = team.substring(0, team.indexOf('### Emergency Contacts') - 1);
+    team = team.substring(0, team.indexOf('### Emergency Procedures / Contacts') - 1);
 
     var teamObj = [];
     //var members = team.substring(0,team.length-1);
@@ -67,7 +67,7 @@ function convertFileToJSON(data) {
         }
     })
 
-    var emergencyContacts = data.substring(data.indexOf('### Emergency Contacts') + 23);
+    var emergencyContacts = data.substring(data.indexOf('### Emergency Procedures / Contacts') + 36);
     emergencyContacts = emergencyContacts.substring(0, emergencyContacts.indexOf('### Weather') - 1);
 
     var weather = data.substring(data.indexOf('### Weather') + 16);

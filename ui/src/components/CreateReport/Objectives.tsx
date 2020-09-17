@@ -16,11 +16,12 @@ const Objectives: React.FC<Props> = (props: Props) => {
             <SimpleMDE
                 id="simplemde-objectives"
                 onChange={props.onChange}
-                value={props.value} 
-                options = {{ 
-                    forceSync: true,
-                    spellChecker: false
-                }}/>
+                value={props.value}
+                options={{
+                    autoDownloadFontAwesome: true,
+                    spellChecker: false,
+                    hideIcons: ["quote", "image", "side-by-side", "fullscreen", "guide"]
+                }} />
 
         </div>
     );

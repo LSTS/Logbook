@@ -13,11 +13,13 @@ import ActionItems from './ActionItems';
 import FinalRemarks from './FinalRemarks';
 import Weather from './Weather';
 
-import { Redirect } from 'react-router-dom'
-import socketIOClient from 'socket.io-client'
+import { Redirect } from 'react-router-dom';
+import socketIOClient from 'socket.io-client';
+
+import host from '../../../package.json';
 
 
-const ENDPOINT = "http://localhost:3001/";
+const ENDPOINT = host.proxy;
 const socket = socketIOClient(ENDPOINT);
 
 export { socket };
@@ -46,7 +48,7 @@ interface State {
 
     teamSelected: string[];
 
-    emergencyContacts: number[];
+    emergencyContacts?: any;
 
     vehicles: IVehicle[];
 
@@ -82,8 +84,6 @@ class CreateReport extends React.Component<Props, State> {
 
             teamSelected: [''],
 
-            emergencyContacts: [],
-
             vehicles: [
                 {
                     name: '',
@@ -107,33 +107,31 @@ class CreateReport extends React.Component<Props, State> {
         this.handleUpdateDate = this.handleUpdateDate.bind(this);
         this.handlePreviewDoc = this.handlePreviewDoc.bind(this);
         this.handleSaveDoc = this.handleSaveDoc.bind(this);
-        this.handleChangeObjectives = this.handleChangeObjectives.bind(this);
-        this.handleChangeTeam = this.handleChangeTeam.bind(this);
-        this.handleUpdateVehicle = this.handleUpdateVehicle.bind(this);
-        this.handleAddVehicle = this.handleAddVehicle.bind(this);
-        this.handleUpdateEquipment = this.handleUpdateEquipment.bind(this);
-        this.handleAddEquipment = this.handleAddEquipment.bind(this);
-        this.handleMissionLog = this.handleMissionLog.bind(this);
-        this.handleUpdateAction = this.handleUpdateAction.bind(this);
-        this.handleAddAction = this.handleAddAction.bind(this);
-        this.handleChangeFinalRemarks = this.handleChangeFinalRemarks.bind(this);
-
-        this.handleSocketUpdate = this.handleSocketUpdate.bind(this);
-        this.handleSockets = this.handleSockets.bind(this);
-
-        this.shouldUpdate = this.shouldUpdate.bind(this);
-
-        this.handleWeatherFileChange = this.handleWeatherFileChange.bind(this);
+        this.handleDownloadFile = this.handleDownloadFile.bind(this);
+        
         this.handleChangeLocation = this.handleChangeLocation.bind(this);
-
+        this.handleChangeObjectives = this.handleChangeObjectives.bind(this);     
+        this.handleChangeTeam = this.handleChangeTeam.bind(this);
         this.handleAddTeamMember = this.handleAddTeamMember.bind(this);
         this.handleDeleteTeamMember = this.handleDeleteTeamMember.bind(this);
-
+        this.handleChangeEmergency = this.handleChangeEmergency.bind(this);
+        this.handleWeatherFileChange = this.handleWeatherFileChange.bind(this);
+        this.handleUpdateVehicle = this.handleUpdateVehicle.bind(this);
+        this.handleAddVehicle = this.handleAddVehicle.bind(this);
+        this.handleDeleteVehicle = this.handleDeleteVehicle.bind(this);
+        this.handleUpdateEquipment = this.handleUpdateEquipment.bind(this);
+        this.handleAddEquipment = this.handleAddEquipment.bind(this);
+        this.handleDeleteEquipment = this.handleDeleteEquipment.bind(this);
+        this.handleMissionLog = this.handleMissionLog.bind(this);
         this.handleUpdateMissionLog = this.handleUpdateMissionLog.bind(this);
         this.handleBlurMissionLog = this.handleBlurMissionLog.bind(this);
-
         this.handleDeleteMissionLog = this.handleDeleteMissionLog.bind(this);
-
+        this.handleUpdateAction = this.handleUpdateAction.bind(this);
+        this.handleAddAction = this.handleAddAction.bind(this);
+        this.handleDeleteAction = this.handleDeleteAction.bind(this);
+        this.handleChangeFinalRemarks = this.handleChangeFinalRemarks.bind(this);
+        this.handleSocketUpdate = this.handleSocketUpdate.bind(this);
+        this.handleSockets = this.handleSockets.bind(this);
     }
 
     componentDidMount() {
@@ -141,13 +139,6 @@ class CreateReport extends React.Component<Props, State> {
         //setInterval(this.storeData,1000);
         this.handleSockets();
     }
-
-    /*
-    storeData(){
-        console.log("update");
-    }
-    */
-
 
     componentWillUnmount() {
         //console.log('close connections');
@@ -158,12 +149,10 @@ class CreateReport extends React.Component<Props, State> {
     async reportExist() {
         let fileName;
         let fileDate;
-
         /*
         console.log(this.props.location);
         console.log('template - ' + this.props.location.template);
         */
-
         const fileToEdit = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
         if (fileToEdit !== 'createReport' && fileToEdit.length > 0) {
             console.log("Load From file");
@@ -177,7 +166,7 @@ class CreateReport extends React.Component<Props, State> {
             fileDate = getCurrentDate();
         }
 
-        const response = await fetch('http://localhost:3001/editFile/' + fileName);
+        const response = await fetch('/editFile/' + fileName);
         const data = await response.json();
 
         if (data === 'Cannot find file') {
@@ -277,13 +266,6 @@ class CreateReport extends React.Component<Props, State> {
 
     }
 
-
-    shouldUpdate() {
-        console.log('---FILENAME---');
-        console.log(this.state.fileName);
-    }
-
-
     handleSocketUpdate() {
         let previewMarkdown = '# LogBook\n';
         previewMarkdown += '## ' + this.state.location + ': ' + this.state.currentDate + '\n';
@@ -300,8 +282,13 @@ class CreateReport extends React.Component<Props, State> {
         previewMarkdown += '### Team\n';
         previewMarkdown += presentTeamMembers(this.state.teamSelected) + '\n';
 
-        previewMarkdown += '### Emergency Contacts\n';
-        previewMarkdown += '* N/D\n';
+        previewMarkdown += '### Emergency Procedures / Contacts\n';
+        if( this.state.emergencyContacts === undefined){
+            previewMarkdown += '\n';
+        }
+        else {
+            previewMarkdown += this.state.emergencyContacts + '\n';
+        }
 
         previewMarkdown += '### Weather\n';
         previewMarkdown += '![](' + this.state.weatherImage + ')\n\n';
@@ -327,11 +314,12 @@ class CreateReport extends React.Component<Props, State> {
         }
 
         console.log('Socket update');
-
+        
         socket.emit('update.file', {
             fileName: this.state.fileName,
             previewMarkdown
         });
+        
     }
 
 
@@ -343,7 +331,7 @@ class CreateReport extends React.Component<Props, State> {
             headers: { 'Content-Type': 'application/json' }
         };
 
-        const response = await fetch('http://localhost:3001/createFile/' + fileName, requestOptions);
+        const response = await fetch('/createFile/' + fileName, requestOptions);
         const data = await response.text();
 
         if (data === 'File created') {
@@ -374,6 +362,8 @@ class CreateReport extends React.Component<Props, State> {
     async handlePreviewDoc() {
         console.log('-----' + this.state.fileName + '-----');
 
+
+
         let previewMarkdown = '# LogBook\n';
         previewMarkdown += '## ' + this.state.location + ': ' + this.state.currentDate + '\n';
 
@@ -388,8 +378,13 @@ class CreateReport extends React.Component<Props, State> {
         previewMarkdown += '### Team\n';
         previewMarkdown += presentTeamMembers(this.state.teamSelected) + '\n';
 
-        previewMarkdown += '### Emergency Contacts\n';
-        previewMarkdown += '* N/D\n';
+        previewMarkdown += '### Emergency Procedures / Contacts\n';
+        if( this.state.emergencyContacts === undefined){
+            previewMarkdown += '\n';
+        }
+        else {
+            previewMarkdown += this.state.emergencyContacts + '\n';
+        }
 
         previewMarkdown += '### Weather\n';
         previewMarkdown += '![](' + this.state.weatherImage + ')\n\n';
@@ -413,9 +408,21 @@ class CreateReport extends React.Component<Props, State> {
         else {
             previewMarkdown += this.state.mdeValueFinalRemarks;
         }
-
         console.log(previewMarkdown);
+    }
 
+
+    async handleDownloadFile () {
+        const data = await fetch('/download/' + this.state.fileName);
+        const fileContent = await data.blob();
+
+        var url = window.URL.createObjectURL(fileContent);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = this.state.fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
     }
 
 
@@ -552,11 +559,11 @@ class CreateReport extends React.Component<Props, State> {
                 body: formData
             };
 
-            const response = await fetch('http://localhost:3001/uploadImage/', requestOptions);
+            const response = await fetch('/uploadImage/', requestOptions);
             const data = await response.json();
 
             if (data.message) {
-                const imageEndpoint = 'http://localhost:3001/image/' + data.fileName;
+                const imageEndpoint = host.proxy + '/image/' + data.fileName;
 
                 this.setState({
                     weatherImage: imageEndpoint
@@ -580,6 +587,17 @@ class CreateReport extends React.Component<Props, State> {
         let vehicles = [...this.state.vehicles, newVehicle];
         this.setState({ vehicles }, this.handleSocketUpdate);
 
+    }
+
+    handleDeleteVehicle(event: any) {
+        const vehicleId = event.target.getAttribute('data-vehicle');
+
+        let vehicles = [...this.state.vehicles];
+        vehicles.splice(vehicleId, 1);
+
+        this.setState({
+            vehicles
+        }, this.handleSocketUpdate);
     }
 
 
@@ -657,6 +675,16 @@ class CreateReport extends React.Component<Props, State> {
         this.setState({ equipment }, this.handleSocketUpdate);
     }
 
+    handleDeleteEquipment(event: any) {
+        const equipId = event.target.getAttribute('data-equipment');
+
+        let equipment = [...this.state.equipment];
+        equipment.splice(equipId, 1);
+
+        this.setState({
+            equipment
+        }, this.handleSocketUpdate);
+    }
 
     //--- Mission Logs
     handleMissionLog(value: any) {
@@ -762,6 +790,16 @@ class CreateReport extends React.Component<Props, State> {
             }, this.handleSocketUpdate);
     }
 
+    handleDeleteAction(event: any) {
+        const actionId = event.target.getAttribute('data-action');
+
+        let actions = [...this.state.actions];
+        actions.splice(actionId, 1);
+
+        this.setState({
+            actions
+        }, this.handleSocketUpdate);
+    }
 
     //--- simpleMDE - Objectives
     handleChangeObjectives = (value: any) => {
@@ -772,6 +810,15 @@ class CreateReport extends React.Component<Props, State> {
         }
     }
 
+    //--- simpleMDE - emergency
+    handleChangeEmergency = (value: any) => {   
+        if(this.state.emergencyContacts !== value){
+            this.setState({
+                emergencyContacts: value
+            }, this.handleSocketUpdate);
+        }
+    } 
+    
     //--- SimpleMDE - Final Remarks
     handleChangeFinalRemarks = (value: any) => {
         if (this.state.mdeValueFinalRemarks !== value) {
@@ -788,7 +835,8 @@ class CreateReport extends React.Component<Props, State> {
 
                 {this.renderRedirect()}
 
-                <button onClick={this.handlePreviewDoc}>Preview</button>
+                {<button onClick={this.handlePreviewDoc}>Preview</button>}
+                <button onClick={this.handleDownloadFile}> &#11015; Download</button>
 
                 <CurrentDate
                     currentDate={this.state.currentDate}
@@ -805,7 +853,9 @@ class CreateReport extends React.Component<Props, State> {
                     onAddTeamMember={this.handleAddTeamMember}
                     onDeleteTeamMember={this.handleDeleteTeamMember} />
 
-                <EmergencyContacts />
+                <EmergencyContacts 
+                    onChange={this.handleChangeEmergency}
+                    value={this.state.emergencyContacts}/>
 
                 <Weather
                     img={this.state.weatherImage}
@@ -814,12 +864,14 @@ class CreateReport extends React.Component<Props, State> {
                 <Vehicle
                     vehiclesList={this.state.vehicles}
                     onChangeVehicle={this.handleUpdateVehicle}
-                    onAddVehicle={this.handleAddVehicle} />
+                    onAddVehicle={this.handleAddVehicle} 
+                    onDeleteVehicle={this.handleDeleteVehicle}/>
 
                 <Equipment
                     equipment={this.state.equipment}
                     onChangeEquipment={this.handleUpdateEquipment}
-                    onAddEquipment={this.handleAddEquipment} />
+                    onAddEquipment={this.handleAddEquipment} 
+                    onDeleteEquipment={this.handleDeleteEquipment}/>
 
                 <MissionLogbook
                     missionLog={this.state.missionLogs}
@@ -831,7 +883,8 @@ class CreateReport extends React.Component<Props, State> {
                 <ActionItems
                     actionList={this.state.actions}
                     onChangeAction={this.handleUpdateAction}
-                    onAddAction={this.handleAddAction} />
+                    onAddAction={this.handleAddAction} 
+                    onDeleteAction={this.handleDeleteAction}/>
 
                 <FinalRemarks
                     onChange={this.handleChangeFinalRemarks}

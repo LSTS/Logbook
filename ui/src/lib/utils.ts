@@ -100,3 +100,29 @@ export function presentActionList(actions: string[]) {
 
     return presentString;
 }
+
+
+export function presentEquipmentSigleLine(equipment: string[]) {
+    if (equipment.length > 0 && equipment[0].length > 0) {
+
+        let presentString = "";
+        equipment.forEach((equip, index) => {
+            if (index !== equipment.length - 1) {
+                presentString += equip + ", ";
+            }
+            else if (index === equipment.length - 1) {
+                presentString += equip + ".";
+            }
+            else {
+                presentString = "";
+            }
+        });
+
+
+        return presentString;
+    }
+
+    else {
+        return "";
+    }
+}

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown/with-html'
 import { useHistory } from 'react-router';
-import { Link } from 'react-router-dom';
 
 
 interface IFile {
@@ -23,7 +22,7 @@ const LoadReport: React.FC = () => {
 
     const handleClickFile = async (fileName: string) => {
         //../api/routes/file
-        const data = await fetch('http://localhost:3001/file/' + fileName);
+        const data = await fetch('/file/' + fileName);
         const fileContent = await data.text();
 
         setFile(fileContent);
@@ -31,7 +30,7 @@ const LoadReport: React.FC = () => {
     }
 
     const listFiles = async () => {
-        const dataFetched = await fetch('http://localhost:3001/file/');
+        const dataFetched = await fetch('/file/');
         
         const files = await dataFetched.text();
 
@@ -42,28 +41,11 @@ const LoadReport: React.FC = () => {
 
 
     const handleEditFile = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        /*
-        //check file template
-        const dataFetched = await fetch('http://localhost:3001/file/type/' + fileName);
-        const template = await dataFetched.text();
-
-        console.log('Load template -> ' + template);
-        if (template === 'template_1') {
-            history.push('/createReport/' + fileName);
-        }
-        else if (template === 'template_2') {
-            history.push('/createReport_2/' + fileName);
-        }
-        else {
-            alert('template not found');
-        }*/
-
         history.push('/createReport/' + fileName);
     }
 
     const handleDownloadFile = async () => {
-
-        const data = await fetch('http://localhost:3001/download/' + fileName);
+        const data = await fetch('/download/' + fileName);
         const fileContent = await data.blob();
 
         var url = window.URL.createObjectURL(fileContent);
@@ -73,9 +55,8 @@ const LoadReport: React.FC = () => {
         document.body.appendChild(a);
         a.click();
         a.remove();
- 
     }
-
+    
 
     return (
         <div className="buttons-index">
@@ -107,7 +88,7 @@ const LoadReport: React.FC = () => {
                 }
 
                 {file ? 
-                (<button className="download-file" onClick={handleDownloadFile}> Download </button>) 
+                (<button className="download-file" onClick={handleDownloadFile}> &#11015; Download </button>) 
                 : (<></>) }
 
                 {

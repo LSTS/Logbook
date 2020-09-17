@@ -1,56 +1,39 @@
 import React from 'react';
 
 import equipmentOptions from '../data/equipment.json';
+import { presentEquipmentSigleLine } from '../../lib/utils';
 
 interface Props {
     onChangeEquipment: any;
     onAddEquipment: any;
+    onDeleteEquipment: any;
     equipment: string[];
 }
 
 const Equipment: React.FC<Props> = (props: Props) => {
 
-    //received from server side json
-    /*
-    const equipmentOptions = [
-        { name: 'equip-1' },
-        { name: 'equip-2' },
-        { name: 'equip-3' },
-        { name: 'equip-4' },
-        { name: 'equip-5' },
-        { name: 'equip-6' }
-    ];
-    */
-
-    /*
-    const [equipmentOptions, setEquipmentOptions] = useState([]);
-
-    useEffect(() => {
-        getEquipmentListFromServer();
-    }, []);
-
-    const getEquipmentListFromServer = () => {
-        fetch('http://localhost:3001/equipment/')
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    setEquipmentOptions(result.equipment);
-                }
-            )
-    }
-    */
-
-
+   const presentString = presentEquipmentSigleLine(props.equipment);
 
     return (
         <div className="equipment">
             <h4 className="title">Other Equipment</h4>
+
+            <h4 className="equipment-selected">
+                {presentString.length > 0 ? ( presentString ) : ( 'N/D' )}
+            </h4>
 
             <ul className="equipment-ul">
                 {
                     props.equipment.map((equip, index) => (
 
                         <li key={index}>
+                            <datalist id="equipmentOptions">
+                                {
+                                    equipmentOptions.map((item, i) => (
+                                        <option key={i}>{item}</option>
+                                    ))
+                                }
+                            </datalist>
 
                             <input data-equipment={index}
                                 type="text" 
@@ -59,13 +42,15 @@ const Equipment: React.FC<Props> = (props: Props) => {
                                 value={equip} 
                                 onChange={props.onChangeEquipment} />
 
-                            <datalist id="equipmentOptions">
-                                {
-                                    equipmentOptions.map((item, i) => (
-                                        <option key={i}>{item}</option>
-                                    ))
-                                }
-                            </datalist>
+                            <button className="delete-equipment" 
+                                data-equipment={index} 
+                                onClick={props.onDeleteEquipment}> 
+                                
+                            &#x2715;
+                                
+                            </button> 
+
+                            
                         </li>
 
                     ))

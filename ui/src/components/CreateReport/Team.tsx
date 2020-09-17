@@ -20,13 +20,9 @@ const Team: React.FC<Props> = (props: Props) => {
         <div className="team">
             <h4 className="title">Team</h4>
 
-
             <h4 className="team-selected">
-                {/*presentString.length > 0 ? ( <ul><li>{presentString}</li></ul>) : (<ul> <li>N/D</li></ul>)*/}
-
                 {presentString.length > 0 ? ( presentString ) : ( 'N/D' )}
             </h4>
-
 
 
             <datalist id="team">

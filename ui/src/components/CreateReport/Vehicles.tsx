@@ -4,15 +4,15 @@ import vehicleOptions from '../data/vehicles.json';
 
 interface Props {
     onChangeVehicle: any;
-
     onAddVehicle: any;
+    onDeleteVehicle: any;
 
     vehiclesList: {
         name: string,
         phone_no: number | undefined,
         gsm_credit: string,
         emergency_pinger: string
-    }[]
+    }[];
 
 }
 
@@ -22,27 +22,6 @@ const Vehicle: React.FC<Props> = (props: Props) => {
     const headers = [
         { id: 1, name: "Name", phone: "Phone no", gsm: "GSM Credit", emergency: "Emergency Pinger" }
     ];
-
-    //received from server side json
-    /*
-    const [vehicleOptions, setVehicleOptions] = useState([]);
-
-    useEffect(() => {
-        getVehicleListFromServer();
-    }, []);
-
-
-    const getVehicleListFromServer = () => {
-        fetch('http://localhost:3001/vehicles/')
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    setVehicleOptions(result.vehicles);
-                }
-            )
-    }
-    */
-
 
     return (
         <div className="vehicles">
@@ -57,6 +36,7 @@ const Vehicle: React.FC<Props> = (props: Props) => {
                                 <th>{header.phone}</th>
                                 <th>{header.gsm}</th>
                                 <th>{header.emergency}</th>
+                                <th className="remove-btn-cell"></th>
                             </tr>
                         ))
                     }
@@ -87,6 +67,16 @@ const Vehicle: React.FC<Props> = (props: Props) => {
 
                                 <td data-type="emergency_pinger" data-vehicle={index}>
                                     <input type="text" className="vehicle-input" placeholder="<Freq,Pattern>" value={item.emergency_pinger} onChange={props.onChangeVehicle} />
+                                </td>
+
+                                <td className="remove-btn-cell">
+                                <button className="delete-vehicle" 
+                                        data-vehicle={index} 
+                                        onClick={props.onDeleteVehicle}> 
+                                
+                                    &#x1f5d1;
+                                
+                                    </button> 
                                 </td>
                             </tr>
                         ))
