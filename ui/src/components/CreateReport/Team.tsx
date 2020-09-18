@@ -52,41 +52,12 @@ const Team: React.FC<Props> = (props: Props) => {
                                 &#x2715;
                                 
                                 </button> 
-                        </li>
-
+                        </li>   
                     ))
                 }
             </ul>
 
             <button onClick={props.onAddTeamMember}>Add team member</button>
-
-
-
-
-
-
-            {/* 
-            <div className="team-checkboxes">
-                {
-                    teamOptions.map((member, index) => (
-
-
-                        <label key={index} className="checkbox-wrap">
-
-                            <input type="checkbox"
-                                value={index}
-                                name={member}
-                                onChange={props.onChange}
-                                checked={props.teamSelected.includes(member)} />
-
-                            {member}
-
-                        </label>
-
-                    ))
-                }
-            </div>
-            */}
 
         </div>
     );

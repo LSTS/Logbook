@@ -31,7 +31,7 @@ const LoadReport: React.FC = () => {
 
     const listFiles = async () => {
         const dataFetched = await fetch('/file/');
-        
+
         const files = await dataFetched.text();
 
         var json = JSON.parse(files);
@@ -56,7 +56,21 @@ const LoadReport: React.FC = () => {
         a.click();
         a.remove();
     }
-    
+
+    const handleDonwloadPdf = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        const pdfFileName = fileName.substring(0, fileName.indexOf('.')) + '.pdf';
+
+        const data = await fetch('/download/pdf/' + fileName);
+        const fileContent = await data.blob();
+
+        var url = window.URL.createObjectURL(fileContent);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = pdfFileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+    }
 
     return (
         <div className="buttons-index">
@@ -78,23 +92,22 @@ const LoadReport: React.FC = () => {
 
             <div className="previewFile">
 
-                {
-                    file ?
-                        (
-                        <button className="edit-report" onClick={handleEditFile}>
-                            &#9998;
-                        </button>
-                        ) : (<></>)
+                {file ?
+                    (<button className="edit-report" onClick={handleEditFile}> &#9998; </button>) : (<></>)
                 }
 
-                {file ? 
-                (<button className="download-file" onClick={handleDownloadFile}> &#11015; Download </button>) 
-                : (<></>) }
+                {file ?
+                    (<button className="download-file" onClick={handleDownloadFile}> &#11015; Markdown </button>) : (<></>)
+                }
 
-                {
-                    file ?
-                        (<ReactMarkdown source={file} />)
-                        : <h4> File not found </h4>
+                {file ?
+                    (<button className="download-pdf-file" onClick={handleDonwloadPdf}> &#11015; PDF </button>) : (<></>)
+                }
+
+
+                {file ?
+                    (<ReactMarkdown source={file} />)
+                    : <h4> File not found </h4>
                 }
 
             </div>

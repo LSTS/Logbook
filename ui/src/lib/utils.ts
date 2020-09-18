@@ -52,7 +52,7 @@ export function presentTeamMembers(teamSelected: string[]) {
 export function presentVehicleTable(vehicles: { name: string, phone_no: number | undefined, gsm_credit: string, emergency_pinger: string }[]) {
 
     let header = '| Name | Phone no | GSM Credit | Emergency Pinger |\n';
-    header += '|---|---|---|---|\n';
+    header += '|:---:|:---:|:---:|:---:|\n';
 
     let bodyString = "";
     vehicles.forEach(vehicle => {
@@ -77,7 +77,7 @@ export function presentLogTable(logs: { time: string, description: string }[]) {
     if (logs.length > 0) {
 
         let header = '| Time | Description |\n';
-        header += '|---|---|\n';
+        header += '|:---:|:---:|\n';
 
         let bodyString = '';
         logs.forEach(log => {

@@ -331,3 +331,8 @@ input[type="file"] {
   max-width: 18px;
   padding: 7px;
 }
+
+.download-file, .download-pdf-file, .edit-report{
+  padding: 3px;
+  margin: 4px;
+}

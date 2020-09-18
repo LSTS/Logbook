@@ -25,11 +25,8 @@ const Objectives: React.FC<Props> = (props: Props) => {
 
         </div>
     );
-
-
-
-
-
+    
 }
+
 
 export default Objectives;

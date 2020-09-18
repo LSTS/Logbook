@@ -108,6 +108,9 @@ class CreateReport extends React.Component<Props, State> {
         this.handlePreviewDoc = this.handlePreviewDoc.bind(this);
         this.handleSaveDoc = this.handleSaveDoc.bind(this);
         this.handleDownloadFile = this.handleDownloadFile.bind(this);
+        this.handleDownloadPdf = this.handleDownloadPdf.bind(this);
+        this.handleSocketUpdate = this.handleSocketUpdate.bind(this);
+        this.handleSockets = this.handleSockets.bind(this);
         
         this.handleChangeLocation = this.handleChangeLocation.bind(this);
         this.handleChangeObjectives = this.handleChangeObjectives.bind(this);     
@@ -129,9 +132,7 @@ class CreateReport extends React.Component<Props, State> {
         this.handleUpdateAction = this.handleUpdateAction.bind(this);
         this.handleAddAction = this.handleAddAction.bind(this);
         this.handleDeleteAction = this.handleDeleteAction.bind(this);
-        this.handleChangeFinalRemarks = this.handleChangeFinalRemarks.bind(this);
-        this.handleSocketUpdate = this.handleSocketUpdate.bind(this);
-        this.handleSockets = this.handleSockets.bind(this);
+        this.handleChangeFinalRemarks = this.handleChangeFinalRemarks.bind(this); 
     }
 
     componentDidMount() {
@@ -425,8 +426,20 @@ class CreateReport extends React.Component<Props, State> {
         a.remove();
     }
 
+    async handleDownloadPdf () {
+        const pdfFileName = this.state.fileName.substring(0, this.state.fileName.indexOf('.')) + '.pdf';
+        const data = await fetch('/download/pdf/' + this.state.fileName);
+        const fileContent = await data.blob();
 
-
+        var url = window.URL.createObjectURL(fileContent);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = pdfFileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+    }
+    
     async handleSaveDoc() {
         let previewMarkdown = '# LogBook\n';
         previewMarkdown += '## ' + this.state.location + ': ' + this.state.currentDate + '\n';
@@ -475,18 +488,6 @@ class CreateReport extends React.Component<Props, State> {
         this.setState({
             redirect: true
         })
-
-        /*
-        if (data === 'File updated') {
-            // redirect page
-            this.setState({
-                redirect: true
-            })
-        }
-        else {
-            alert('Cannot save changes');
-        }
-        */
     }
 
 
@@ -547,9 +548,7 @@ class CreateReport extends React.Component<Props, State> {
 
     //--- weather 
     async handleWeatherFileChange(event: React.ChangeEvent<HTMLInputElement>) {
-
         if (event.target.files !== null) {
-
             //send file to server
             const formData = new FormData();
             formData.append('image', event.target.files[0]);
@@ -602,7 +601,7 @@ class CreateReport extends React.Component<Props, State> {
 
 
     handleUpdateVehicle(event: any) {
-        console.log("update vehicle");
+        //console.log("update vehicle");
 
         var elem = event.target;
         var vehicleId = elem.parentElement.getAttribute('data-vehicle');
@@ -703,7 +702,7 @@ class CreateReport extends React.Component<Props, State> {
         var logType = elem.getAttribute('data-log-type');
         var value = elem.value;
 
-        console.log('[' + logId + '] - ' + logType + ' --> ' + value);
+        //console.log('[' + logId + '] - ' + logType + ' --> ' + value);
 
         let missionLogs = [...this.state.missionLogs];
         let item;
@@ -737,7 +736,6 @@ class CreateReport extends React.Component<Props, State> {
     }
 
     handleBlurMissionLog(logId: number, value: string) {
-
         let missionLogs = [...this.state.missionLogs];
         let item = {
             ...missionLogs[logId],
@@ -751,7 +749,6 @@ class CreateReport extends React.Component<Props, State> {
     }
 
     handleDeleteMissionLog(event: any) {
-
         const logId = event.target.getAttribute('data-log-id');
 
         let missionLogs = [...this.state.missionLogs];
@@ -760,7 +757,6 @@ class CreateReport extends React.Component<Props, State> {
         this.setState({
             missionLogs
         }, this.handleSocketUpdate);
-        
     }
 
 
@@ -835,8 +831,9 @@ class CreateReport extends React.Component<Props, State> {
 
                 {this.renderRedirect()}
 
-                {<button onClick={this.handlePreviewDoc}>Preview</button>}
-                <button onClick={this.handleDownloadFile}> &#11015; Download</button>
+                {/*<button onClick={this.handlePreviewDoc}>Preview</button>*/}
+                <button className="download-file" onClick={this.handleDownloadFile}> &#11015; Download</button>
+                <button className="download-pdf-file" onClick={this.handleDownloadPdf}> &#11015; PDF </button>
 
                 <CurrentDate
                     currentDate={this.state.currentDate}
@@ -893,30 +890,7 @@ class CreateReport extends React.Component<Props, State> {
             </div >
         );
     }
-
 }
-
-
-/*
-                <h6>{this.state.mdeValueObjectives}</h6>
-                <h6>{this.state.teamSelected}</h6>
-                */
-
-
-
-/*
-const CreateReport: React.FC = () => {
-
-    const [currentDate , setCurrentDate] = useState('');
-
-
-    return (
-        <div className="report">
-            <CurrentDate onChange={() => alert('test')}/>
-        </div>
-    );
-}
-*/
 
 
 export default CreateReport;
