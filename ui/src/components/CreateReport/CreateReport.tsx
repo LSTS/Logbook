@@ -31,6 +31,11 @@ interface IVehicle {
     emergency_pinger: string
 }
 
+interface IMissionLogs {
+    time: string,
+    description: string
+}
+
 interface Props {
     location: any;
 }
@@ -54,10 +59,7 @@ interface State {
 
     equipment: string[];
 
-    missionLogs: {
-        time: string,
-        description: string
-    }[];
+    missionLogs: IMissionLogs[];
 
     actions: string[];
 
@@ -111,9 +113,9 @@ class CreateReport extends React.Component<Props, State> {
         this.handleDownloadPdf = this.handleDownloadPdf.bind(this);
         this.handleSocketUpdate = this.handleSocketUpdate.bind(this);
         this.handleSockets = this.handleSockets.bind(this);
-        
+
         this.handleChangeLocation = this.handleChangeLocation.bind(this);
-        this.handleChangeObjectives = this.handleChangeObjectives.bind(this);     
+        this.handleChangeObjectives = this.handleChangeObjectives.bind(this);
         this.handleChangeTeam = this.handleChangeTeam.bind(this);
         this.handleAddTeamMember = this.handleAddTeamMember.bind(this);
         this.handleDeleteTeamMember = this.handleDeleteTeamMember.bind(this);
@@ -132,7 +134,7 @@ class CreateReport extends React.Component<Props, State> {
         this.handleUpdateAction = this.handleUpdateAction.bind(this);
         this.handleAddAction = this.handleAddAction.bind(this);
         this.handleDeleteAction = this.handleDeleteAction.bind(this);
-        this.handleChangeFinalRemarks = this.handleChangeFinalRemarks.bind(this); 
+        this.handleChangeFinalRemarks = this.handleChangeFinalRemarks.bind(this);
     }
 
     componentDidMount() {
@@ -284,7 +286,7 @@ class CreateReport extends React.Component<Props, State> {
         previewMarkdown += presentTeamMembers(this.state.teamSelected) + '\n';
 
         previewMarkdown += '### Emergency Procedures / Contacts\n';
-        if( this.state.emergencyContacts === undefined){
+        if (this.state.emergencyContacts === undefined) {
             previewMarkdown += '\n';
         }
         else {
@@ -315,12 +317,12 @@ class CreateReport extends React.Component<Props, State> {
         }
 
         console.log('Socket update');
-        
+
         socket.emit('update.file', {
             fileName: this.state.fileName,
             previewMarkdown
         });
-        
+
     }
 
 
@@ -380,7 +382,7 @@ class CreateReport extends React.Component<Props, State> {
         previewMarkdown += presentTeamMembers(this.state.teamSelected) + '\n';
 
         previewMarkdown += '### Emergency Procedures / Contacts\n';
-        if( this.state.emergencyContacts === undefined){
+        if (this.state.emergencyContacts === undefined) {
             previewMarkdown += '\n';
         }
         else {
@@ -413,7 +415,7 @@ class CreateReport extends React.Component<Props, State> {
     }
 
 
-    async handleDownloadFile () {
+    async handleDownloadFile() {
         const data = await fetch('/download/' + this.state.fileName);
         const fileContent = await data.blob();
 
@@ -426,7 +428,7 @@ class CreateReport extends React.Component<Props, State> {
         a.remove();
     }
 
-    async handleDownloadPdf () {
+    async handleDownloadPdf() {
         const pdfFileName = this.state.fileName.substring(0, this.state.fileName.indexOf('.')) + '.pdf';
         const data = await fetch('/download/pdf/' + this.state.fileName);
         const fileContent = await data.blob();
@@ -439,7 +441,7 @@ class CreateReport extends React.Component<Props, State> {
         a.click();
         a.remove();
     }
-    
+
     async handleSaveDoc() {
         let previewMarkdown = '# LogBook\n';
         previewMarkdown += '## ' + this.state.location + ': ' + this.state.currentDate + '\n';
@@ -729,8 +731,8 @@ class CreateReport extends React.Component<Props, State> {
         }
         missionLogs[logId] = item;
 
-        this.setState({ 
-            missionLogs 
+        this.setState({
+            missionLogs
         }, this.handleSocketUpdate);
 
     }
@@ -741,10 +743,10 @@ class CreateReport extends React.Component<Props, State> {
             ...missionLogs[logId],
             time: value
         };
-        
+
         missionLogs[logId] = item;
-        this.setState({ 
-            missionLogs 
+        this.setState({
+            missionLogs
         }, this.handleSocketUpdate);
     }
 
@@ -807,14 +809,14 @@ class CreateReport extends React.Component<Props, State> {
     }
 
     //--- simpleMDE - emergency
-    handleChangeEmergency = (value: any) => {   
-        if(this.state.emergencyContacts !== value){
+    handleChangeEmergency = (value: any) => {
+        if (this.state.emergencyContacts !== value) {
             this.setState({
                 emergencyContacts: value
             }, this.handleSocketUpdate);
         }
-    } 
-    
+    }
+
     //--- SimpleMDE - Final Remarks
     handleChangeFinalRemarks = (value: any) => {
         if (this.state.mdeValueFinalRemarks !== value) {
@@ -850,9 +852,9 @@ class CreateReport extends React.Component<Props, State> {
                     onAddTeamMember={this.handleAddTeamMember}
                     onDeleteTeamMember={this.handleDeleteTeamMember} />
 
-                <EmergencyContacts 
+                <EmergencyContacts
                     onChange={this.handleChangeEmergency}
-                    value={this.state.emergencyContacts}/>
+                    value={this.state.emergencyContacts} />
 
                 <Weather
                     img={this.state.weatherImage}
@@ -861,27 +863,27 @@ class CreateReport extends React.Component<Props, State> {
                 <Vehicle
                     vehiclesList={this.state.vehicles}
                     onChangeVehicle={this.handleUpdateVehicle}
-                    onAddVehicle={this.handleAddVehicle} 
-                    onDeleteVehicle={this.handleDeleteVehicle}/>
+                    onAddVehicle={this.handleAddVehicle}
+                    onDeleteVehicle={this.handleDeleteVehicle} />
 
                 <Equipment
                     equipment={this.state.equipment}
                     onChangeEquipment={this.handleUpdateEquipment}
-                    onAddEquipment={this.handleAddEquipment} 
-                    onDeleteEquipment={this.handleDeleteEquipment}/>
+                    onAddEquipment={this.handleAddEquipment}
+                    onDeleteEquipment={this.handleDeleteEquipment} />
 
                 <MissionLogbook
                     missionLog={this.state.missionLogs}
                     onAddMissionLog={this.handleMissionLog}
                     onChangeMissionLog={this.handleUpdateMissionLog}
-                    onBlurMissionLog={this.handleBlurMissionLog} 
-                    onDeleteMissionLog={this.handleDeleteMissionLog}/>
+                    onBlurMissionLog={this.handleBlurMissionLog}
+                    onDeleteMissionLog={this.handleDeleteMissionLog} />
 
                 <ActionItems
                     actionList={this.state.actions}
                     onChangeAction={this.handleUpdateAction}
-                    onAddAction={this.handleAddAction} 
-                    onDeleteAction={this.handleDeleteAction}/>
+                    onAddAction={this.handleAddAction}
+                    onDeleteAction={this.handleDeleteAction} />
 
                 <FinalRemarks
                     onChange={this.handleChangeFinalRemarks}

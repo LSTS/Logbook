@@ -8,7 +8,6 @@ var app = express();
 app.io = require('socket.io')();
 
 var indexRouter = require('./routes/index')(app.io);
-var testAPIRouter = require('./routes/testAPI');
 var fileRouter = require('./routes/file');
 var createFileRouter = require('./routes/createFile');
 var editFileRouter = require('./routes/editFile');
@@ -34,7 +33,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/testAPI', testAPIRouter);
 app.use('/file', fileRouter);
 app.use('/createFile', createFileRouter);
 app.use('/editFile', editFileRouter);

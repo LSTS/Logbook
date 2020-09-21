@@ -106,7 +106,7 @@ const LoadReport: React.FC = () => {
 
 
                 {file ?
-                    (<ReactMarkdown source={file} />)
+                    (<ReactMarkdown className='markdown-body' source={file} escapeHtml={false}/>)
                     : <h4> File not found </h4>
                 }
 

@@ -336,3 +336,7 @@ input[type="file"] {
   padding: 3px;
   margin: 4px;
 }
+
+.markdown-body th, .markdown-body td, .markdown-body table {
+  border: 1px solid;
+}
