@@ -25,15 +25,22 @@
 /* Load report */
 .list-files {
   text-align: left;
+  padding: 5px 5px 5px 40px;
+  display: block;
 }
 
 .list-file-item {
-  padding: 5px;
-  /*display: block;*/
+  padding: 3px;
+  display: table;
+  cursor: pointer;
 }
 
 .list-file-item:hover {
   text-decoration: underline;
+}
+
+.list-file-item-active {
+  background-color: gainsboro;
 }
 
 .button-load-report, .button-create-report{
@@ -191,7 +198,7 @@ select {
   text-align: center;
 }
 
-.image-weather{
+.image-weather, img{
   max-width: 100%;
 }
 

@@ -16,8 +16,8 @@ const Weather: React.FC<Props> = (props: Props) => {
                 <div className="image-btn">
                     <input type="file" id="weatherFile" onChange={props.onChange} />
                     <label className="input-file-label" htmlFor="weatherFile"> Choose File </label>
-                       
                 </div>
+
                 {props.img ?
                     (<div className="image-preview">
                         <img className="image-weather" alt="weather" src={props.img} />
@@ -27,14 +27,8 @@ const Weather: React.FC<Props> = (props: Props) => {
                 }
             </div>
 
-
         </div>
     );
-
-
-
-
-
 }
 
 export default Weather;

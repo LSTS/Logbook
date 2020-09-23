@@ -45,9 +45,8 @@ const Vehicle: React.FC<Props> = (props: Props) => {
                         props.vehiclesList.map((item, index) => (
                             <tr key={index} data-vehicle={index} >
                                 <td data-type="name" data-vehicle={index}>
-                                    <input type="text" className="vehicle-input" list="vehicles" value={item.name} onChange={props.onChangeVehicle}>
+                                    <input type="text" className="vehicle-input" list="vehicles" value={item.name} onChange={props.onChangeVehicle} />
 
-                                    </input>
                                     <datalist id="vehicles">
                                         {
                                             vehicleOptions.map((vehicle, index) => (
@@ -70,7 +69,7 @@ const Vehicle: React.FC<Props> = (props: Props) => {
                                 </td>
 
                                 <td className="remove-btn-cell">
-                                <button className="delete-vehicle" 
+                                    <button className="delete-vehicle" 
                                         data-vehicle={index} 
                                         onClick={props.onDeleteVehicle}> 
                                 
@@ -81,7 +80,6 @@ const Vehicle: React.FC<Props> = (props: Props) => {
                             </tr>
                         ))
                     }
-
                 </tbody>
             </table>
 

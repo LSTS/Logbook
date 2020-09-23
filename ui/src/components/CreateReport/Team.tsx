@@ -45,7 +45,7 @@ const Team: React.FC<Props> = (props: Props) => {
                                 value={name}
                                 onChange={props.onChange} />
                             
-                               <button className="delete-team" 
+                                <button className="delete-team" 
                                     data-member={index} 
                                     onClick={props.onDeleteTeamMember}> 
                                 

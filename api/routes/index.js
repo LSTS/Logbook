@@ -72,9 +72,6 @@ function updateFileContent(fileName, previewMarkdown) {
     console.log('creaating dir');
     //console.log(err);
   }
-
-
-
 };
 
 

@@ -11,14 +11,11 @@ var indexRouter = require('./routes/index')(app.io);
 var fileRouter = require('./routes/file');
 var createFileRouter = require('./routes/createFile');
 var editFileRouter = require('./routes/editFile');
-var updateFileRouter = require('./routes/updateFile');
 var downloadFile = require('./routes/downloadFile');
 var uploadImageRouter = require('./routes/uploadImage');
 var getImageRouter = require('./routes/getImage');
 
-
 var cors = require('cors');
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -36,7 +33,6 @@ app.use('/', indexRouter);
 app.use('/file', fileRouter);
 app.use('/createFile', createFileRouter);
 app.use('/editFile', editFileRouter);
-app.use('/updateFile', updateFileRouter);
 app.use('/download', downloadFile);
 app.use('/uploadImage' , uploadImageRouter);
 app.use('/image' , getImageRouter);

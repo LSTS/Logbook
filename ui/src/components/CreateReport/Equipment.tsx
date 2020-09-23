@@ -46,20 +46,16 @@ const Equipment: React.FC<Props> = (props: Props) => {
                                 data-equipment={index} 
                                 onClick={props.onDeleteEquipment}> 
                                 
-                            &#x2715;
+                                &#x2715;
                                 
                             </button> 
-
                             
                         </li>
-
                     ))
                 }
             </ul>
 
-
-            <button onClick={props.onAddEquipment}>Add equipment</button>
-
+            <button onClick={props.onAddEquipment}> Add equipment </button>
 
         </div>
     );

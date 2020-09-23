@@ -39,12 +39,9 @@ const MissionLogbook: React.FC<Props> = (props: Props) => {
     }
 
     const handleOnBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-
         const elem = event.target;
         const logId = elem.getAttribute('data-log-id');
         const value = event.target.value;
-
-        //console.log('TIME - ' + value);
 
         if (value.indexOf(':') !== -1) {
             const hours = value.substring(0, value.indexOf(':'));
@@ -99,10 +96,9 @@ const MissionLogbook: React.FC<Props> = (props: Props) => {
                                         value={item.time}
                                         onChange={props.onChangeMissionLog}
                                         onBlur={handleOnBlur} />
-
-                                    {/*item.time*/}
                                     
-                                    </td>
+                                </td>
+                                
                                 <td className="missionLog-table-description">
 
                                     <input type="text"
@@ -116,13 +112,12 @@ const MissionLogbook: React.FC<Props> = (props: Props) => {
                                         data-log-id={index} 
                                         onClick={props.onDeleteMissionLog}> 
                                 
-                                    &#x1f5d1;
+                                        &#x1f5d1;
                                 
                                     </button> 
+
                                     <br></br>
-                                    
                                 </td>
-                              
                             </tr>
                         ))
                     }
@@ -141,7 +136,7 @@ const MissionLogbook: React.FC<Props> = (props: Props) => {
                     placeholder="Enter description"
                     value={logDescription} />
 
-                <button className="button-addMissionLog" onClick={handleButtonAddLog}>Add Log</button>
+                <button className="button-addMissionLog" onClick={handleButtonAddLog}> Add Log </button>
 
             </div>
 

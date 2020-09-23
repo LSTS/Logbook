@@ -143,19 +143,10 @@ class CreateReport extends React.Component<Props, State> {
         this.handleSockets();
     }
 
-    componentWillUnmount() {
-        //console.log('close connections');
-        //socket.close();
-    }
-
-
     async reportExist() {
         let fileName;
         let fileDate;
-        /*
-        console.log(this.props.location);
-        console.log('template - ' + this.props.location.template);
-        */
+
         const fileToEdit = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
         if (fileToEdit !== 'createReport' && fileToEdit.length > 0) {
             console.log("Load From file");
@@ -164,7 +155,6 @@ class CreateReport extends React.Component<Props, State> {
 
         }
         else {
-            //console.log("Check if exist to load");
             fileName = 'debriefing_' + getCurrentDate() + '.md';
             fileDate = getCurrentDate();
         }
@@ -199,7 +189,6 @@ class CreateReport extends React.Component<Props, State> {
             })
         }
     }
-
 
 
 
@@ -256,7 +245,6 @@ class CreateReport extends React.Component<Props, State> {
                         actions: data.data.actions,
                         mdeValueFinalRemarks: data.data.finalRemarks
                     })
-
                 }
                 else {
                     //console.log("Not change state");
@@ -266,13 +254,13 @@ class CreateReport extends React.Component<Props, State> {
                 //console.log("Ficheiro diferentes nao alterar");
             }
         });
-
     }
+
+
 
     handleSocketUpdate() {
         let previewMarkdown = '# LogBook\n';
         previewMarkdown += '## ' + this.state.location + ': ' + this.state.currentDate + '\n';
-        //previewMarkdown += '## FEUP: ' + this.state.currentDate + '\n';
 
         previewMarkdown += '### Objectives\n';
         if (this.state.mdeValueObjectives === undefined) {
@@ -322,13 +310,11 @@ class CreateReport extends React.Component<Props, State> {
             fileName: this.state.fileName,
             previewMarkdown
         });
-
     }
 
 
 
     async createFile(fileName: string) {
-
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' }
@@ -362,10 +348,9 @@ class CreateReport extends React.Component<Props, State> {
     }
 
 
+
     async handlePreviewDoc() {
         console.log('-----' + this.state.fileName + '-----');
-
-
 
         let previewMarkdown = '# LogBook\n';
         previewMarkdown += '## ' + this.state.location + ': ' + this.state.currentDate + '\n';
@@ -415,6 +400,7 @@ class CreateReport extends React.Component<Props, State> {
     }
 
 
+
     async handleDownloadFile() {
         const data = await fetch('/download/' + this.state.fileName);
         const fileContent = await data.blob();
@@ -442,10 +428,11 @@ class CreateReport extends React.Component<Props, State> {
         a.remove();
     }
 
+
+
     async handleSaveDoc() {
         let previewMarkdown = '# LogBook\n';
         previewMarkdown += '## ' + this.state.location + ': ' + this.state.currentDate + '\n';
-        //previewMarkdown += '## FEUP: ' + this.state.currentDate + '\n';
 
         previewMarkdown += '### Objectives\n';
         if (this.state.mdeValueObjectives === undefined) {
@@ -482,7 +469,6 @@ class CreateReport extends React.Component<Props, State> {
         }
 
         console.log(previewMarkdown);
-
 
         this.handleSocketUpdate();
 
@@ -521,7 +507,6 @@ class CreateReport extends React.Component<Props, State> {
             {
                 teamSelected
             }, this.handleSocketUpdate);
-
     }
 
     handleAddTeamMember() {
@@ -545,7 +530,6 @@ class CreateReport extends React.Component<Props, State> {
             teamSelected
         }, this.handleSocketUpdate);
     }
-
 
 
     //--- weather 
@@ -574,10 +558,8 @@ class CreateReport extends React.Component<Props, State> {
     }
 
 
-
     //--- Vehicles
     handleAddVehicle() {
-        //console.log("Add vehicle - " + this.state.vehicles.length );
         const newVehicle = {
             name: '',
             phone_no: undefined,
@@ -587,7 +569,6 @@ class CreateReport extends React.Component<Props, State> {
 
         let vehicles = [...this.state.vehicles, newVehicle];
         this.setState({ vehicles }, this.handleSocketUpdate);
-
     }
 
     handleDeleteVehicle(event: any) {
@@ -601,7 +582,6 @@ class CreateReport extends React.Component<Props, State> {
         }, this.handleSocketUpdate);
     }
 
-
     handleUpdateVehicle(event: any) {
         //console.log("update vehicle");
 
@@ -609,12 +589,6 @@ class CreateReport extends React.Component<Props, State> {
         var vehicleId = elem.parentElement.getAttribute('data-vehicle');
         var dataType = elem.parentElement.getAttribute('data-type');
         var value = elem.value;
-
-        /*
-        console.log("ID    -> " + vehicleId);
-        console.log("type  -> " + dataType);
-        console.log("value -> " + value);
-        */
 
         let vehicles = [...this.state.vehicles];
         let item;
@@ -652,10 +626,9 @@ class CreateReport extends React.Component<Props, State> {
 
         this.setState({ vehicles }, this.handleSocketUpdate);
 
-
-        //console.log("update vehicle (" + dataType + "(" + id + ")) - " + value);
-
+        //console.log("update vehicle (" + dataType + "(" + vehicleId + ")) - " + value);
     }
+
 
     //--- Equipment
     handleUpdateEquipment(event: any) {
@@ -686,6 +659,7 @@ class CreateReport extends React.Component<Props, State> {
             equipment
         }, this.handleSocketUpdate);
     }
+
 
     //--- Mission Logs
     handleMissionLog(value: any) {
@@ -734,7 +708,6 @@ class CreateReport extends React.Component<Props, State> {
         this.setState({
             missionLogs
         }, this.handleSocketUpdate);
-
     }
 
     handleBlurMissionLog(logId: number, value: string) {
@@ -760,7 +733,6 @@ class CreateReport extends React.Component<Props, State> {
             missionLogs
         }, this.handleSocketUpdate);
     }
-
 
 
     //--- Action Items
@@ -799,6 +771,7 @@ class CreateReport extends React.Component<Props, State> {
         }, this.handleSocketUpdate);
     }
 
+
     //--- simpleMDE - Objectives
     handleChangeObjectives = (value: any) => {
         if (this.state.mdeValueObjectives !== value) {
@@ -808,6 +781,7 @@ class CreateReport extends React.Component<Props, State> {
         }
     }
 
+
     //--- simpleMDE - emergency
     handleChangeEmergency = (value: any) => {
         if (this.state.emergencyContacts !== value) {
@@ -816,6 +790,7 @@ class CreateReport extends React.Component<Props, State> {
             }, this.handleSocketUpdate);
         }
     }
+
 
     //--- SimpleMDE - Final Remarks
     handleChangeFinalRemarks = (value: any) => {

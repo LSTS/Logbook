@@ -21,7 +21,6 @@ const LoadReport: React.FC = () => {
     let history = useHistory();
 
     const handleClickFile = async (fileName: string) => {
-        //../api/routes/file
         const data = await fetch('/file/' + fileName);
         const fileContent = await data.text();
 
@@ -31,11 +30,9 @@ const LoadReport: React.FC = () => {
 
     const listFiles = async () => {
         const dataFetched = await fetch('/file/');
-
         const files = await dataFetched.text();
 
         var json = JSON.parse(files);
-
         setData(json);
     }
 
@@ -43,6 +40,7 @@ const LoadReport: React.FC = () => {
     const handleEditFile = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         history.push('/createReport/' + fileName);
     }
+
 
     const handleDownloadFile = async () => {
         const data = await fetch('/download/' + fileName);
@@ -56,6 +54,7 @@ const LoadReport: React.FC = () => {
         a.click();
         a.remove();
     }
+
 
     const handleDonwloadPdf = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         const pdfFileName = fileName.substring(0, fileName.indexOf('.')) + '.pdf';
@@ -72,20 +71,21 @@ const LoadReport: React.FC = () => {
         a.remove();
     }
 
+
+
     return (
         <div className="buttons-index">
 
             <div className="list-files">
-                <ul>
-                    {
-                        data.map((item, index) => (
-                            <li key={index} className="list-file-item" onClick={() => handleClickFile(item.name)}>
-                                {item.name}
-                            </li>
 
-                        ))
-                    }
-                </ul>
+                {
+                    data.map((item, index) => (
+                        <span key={index} className="list-file-item" onClick={() => handleClickFile(item.name)}> 
+                            {item.name} 
+                        </span>
+                    ))
+                }
+
             </div>
 
             <hr />
@@ -107,13 +107,10 @@ const LoadReport: React.FC = () => {
 
                 {file ?
                     (<ReactMarkdown className='markdown-body' source={file} escapeHtml={false}/>)
-                    : <h4> File not found </h4>
+                    : <h4> (File Preview) </h4>
                 }
 
             </div>
-
-
-
 
         </div>
     );

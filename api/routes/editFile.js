@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 var path = require('path');
-const { exit } = require('process');
 
 
 /* GET file from server JSON. */
