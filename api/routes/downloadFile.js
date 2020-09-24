@@ -6,7 +6,6 @@ var path = require('path');
 var markdownpdf = require('markdown-pdf');
 
 
-
 /* downlaod file from server */
 router.get('/:fileName', function (req, res, next) {
 
@@ -60,6 +59,7 @@ router.get('/pdf/:fileName', function (req, res, next) {
     catch (err) {
         console.log(err);
     }
+    
 });
 
 

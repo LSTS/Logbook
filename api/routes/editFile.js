@@ -8,9 +8,9 @@ var path = require('path');
 router.get('/:fileName', function (req, res, next) {
 
     var filePath = path.join('../api/markdownFiles/', req.params.fileName);
+
     try {
         if (fs.existsSync(filePath)) {
-            //enviar conteudo
 
             fs.readFile(filePath, { encoding: 'utf-8' }, function (err, data) {
                 if (!err) {
@@ -26,7 +26,6 @@ router.get('/:fileName', function (req, res, next) {
                     console.log(err);
                 }
             });
-
         }
         else {
             console.log("Cannot find file - " + req.params.fileName);
@@ -36,6 +35,7 @@ router.get('/:fileName', function (req, res, next) {
     catch (err) {
         console.log(err);
     }
+
 });
 
 
@@ -124,7 +124,6 @@ function convertFileToJSON(data) {
     actionList.forEach(item => {
         actionsObj.push(item.substring(3));
     });
-
 
     var finalRemarks = data.substring(data.indexOf('### Final Remarks') + 18);
     finalRemarks = finalRemarks.substring(0, data.length - 1);

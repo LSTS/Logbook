@@ -20,13 +20,21 @@ const LoadReport: React.FC = () => {
 
     let history = useHistory();
 
-    const handleClickFile = async (fileName: string) => {
-        const data = await fetch('/file/' + fileName);
-        const fileContent = await data.text();
+    
+    const handleClickFile = async (fileNameToOpen: string) => {
 
-        setFile(fileContent);
-        setFileName(fileName);
+        if(fileName !== fileNameToOpen){
+            const data = await fetch('/file/' + fileNameToOpen);
+            const fileContent = await data.text();
+
+            setFile(fileContent);
+            setFileName(fileNameToOpen);
+        }
+        else {
+            console.log('File already open');
+        }    
     }
+
 
     const listFiles = async () => {
         const dataFetched = await fetch('/file/');
@@ -79,10 +87,11 @@ const LoadReport: React.FC = () => {
             <div className="list-files">
 
                 {
-                    data.map((item, index) => (
-                        <span key={index} className="list-file-item" onClick={() => handleClickFile(item.name)}> 
-                            {item.name} 
-                        </span>
+                    data.map((item, index) => (        
+                        (fileName === item.name) ?
+                        (<span key={index} className="list-file-item-active" onClick={() => handleClickFile(item.name)}> &#128462; {item.name}  </span>)
+                        :
+                        (<span key={index} className="list-file-item" onClick={() => handleClickFile(item.name)}> &#128462; {item.name} </span>)
                     ))
                 }
 

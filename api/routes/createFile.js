@@ -4,12 +4,9 @@ var fs = require('fs');
 var path = require('path');
 
 
-/* Create new File */
 router.post('/:fileName', function (req, res, next) {
+    //console.log(req.body.data);
 
-    console.log(req.body.data);
-
-    
     var filePath = path.join('../api/markdownFiles/', req.params.fileName);
 
     try {
@@ -30,7 +27,6 @@ router.post('/:fileName', function (req, res, next) {
     catch (err) {
         console.log(err);
     }
-    
 
 });
 

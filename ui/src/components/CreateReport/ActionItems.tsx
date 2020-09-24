@@ -23,7 +23,7 @@ const ActionItems: React.FC<Props> = (props: Props) => {
                                 data-action={index} 
                                 onClick={props.onDeleteAction}> 
                                 
-                            &#x2715;
+                                &#x2715;
                                 
                             </button> 
 

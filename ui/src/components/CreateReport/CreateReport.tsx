@@ -37,36 +37,26 @@ interface IMissionLogs {
 }
 
 interface Props {
-    location: any;
+    //location: any;
 }
+
 
 interface State {
 
     fileName: string;
-
     currentDate: string;
     firstRender: boolean;
-
     location: string;
 
     mdeValueObjectives?: any;
-
     teamSelected: string[];
-
     emergencyContacts?: any;
-
     vehicles: IVehicle[];
-
     equipment: string[];
-
     missionLogs: IMissionLogs[];
-
     actions: string[];
-
     mdeValueFinalRemarks?: any;
-
     redirect: boolean;
-
     weatherImage: string;
 }
 

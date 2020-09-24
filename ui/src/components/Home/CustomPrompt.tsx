@@ -35,7 +35,7 @@ const CustomPrompt: React.FC<Props> = (props: Props) => {
         else if (fileName.startsWith('debriefing_') && fileName.endsWith('.md')) {
 
             //check file template
-            const dataFetched = await fetch('http://localhost:3001/file/exist/' + fileName);
+            const dataFetched = await fetch('/file/exist/' + fileName);
             const fileExist = await dataFetched.json();
             
             if(fileExist.result) {
