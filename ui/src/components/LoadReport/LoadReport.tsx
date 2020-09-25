@@ -8,22 +8,35 @@ interface IFile {
     isDir: boolean;
 }
 
-const LoadReport: React.FC = () => {
+interface IFileSorted {
+    
+}
 
-    useEffect(() => {
-        listFiles();
-    }, []);
+const LoadReport: React.FC = () => {
 
     const [fileName, setFileName] = useState('');
     const [file, setFile] = useState('');
     const [data, setData] = useState<IFile[]>([]);
 
+    const [sortedFiles, setSortedFiles] = useState<any[]>([]);
+
     let history = useHistory();
 
-    
+
+    useEffect(() => {
+        listFiles();
+    }, []);
+
+
+    useEffect(() => {
+        sortFiles();
+    }, [data]);
+
+
+
     const handleClickFile = async (fileNameToOpen: string) => {
 
-        if(fileName !== fileNameToOpen){
+        if (fileName !== fileNameToOpen) {
             const data = await fetch('/file/' + fileNameToOpen);
             const fileContent = await data.text();
 
@@ -32,7 +45,7 @@ const LoadReport: React.FC = () => {
         }
         else {
             console.log('File already open');
-        }    
+        }
     }
 
 
@@ -80,6 +93,54 @@ const LoadReport: React.FC = () => {
     }
 
 
+    const sortFiles = () => {
+        console.log(data);
+
+        var finalObj: any = [];
+
+        var monthName = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+        data.forEach((file, index) => {
+            const fileDate = file.name.substring(11, file.name.length - 3);
+            //console.log(fileDate);
+
+            const fileYear = fileDate.split('-')[0];
+            const fileMonth = fileDate.split('-')[1];
+
+            var year = parseInt(fileYear); 
+            var month = monthName[parseInt(fileMonth)];
+
+            if( !finalObj[year] ) {
+                finalObj[year] = [];
+                if(!finalObj[year][month]) {
+                    finalObj[year][month] = [file.name];
+                }
+                else {
+                    finalObj[year][month].push(file.name);
+                }
+            }
+            else {
+                finalObj[year].push();
+                if(!finalObj[year][month]) {
+                    finalObj[year][month] = [file.name];
+                }
+                else {
+                    finalObj[year][month].push(file.name);
+                }
+            }
+            
+        })
+
+        //console.log(finalObj);
+
+        const obj = Object.assign({},finalObj);
+        console.log(obj);
+        setSortedFiles(obj);
+   
+        
+    }
+
+
 
     return (
         <div className="buttons-index">
@@ -87,11 +148,11 @@ const LoadReport: React.FC = () => {
             <div className="list-files">
 
                 {
-                    data.map((item, index) => (        
+                    data.map((item, index) => (
                         (fileName === item.name) ?
-                        (<span key={index} className="list-file-item-active" onClick={() => handleClickFile(item.name)}> &#128462; {item.name}  </span>)
-                        :
-                        (<span key={index} className="list-file-item" onClick={() => handleClickFile(item.name)}> &#128462; {item.name} </span>)
+                            (<span key={index} className="list-file-item-active" onClick={() => handleClickFile(item.name)}> &#128193; {item.name}  </span>)
+                            :
+                            (<span key={index} className="list-file-item" onClick={() => handleClickFile(item.name)}> &#128193; {item.name} </span>)
                     ))
                 }
 
@@ -115,7 +176,7 @@ const LoadReport: React.FC = () => {
 
 
                 {file ?
-                    (<ReactMarkdown className='markdown-body' source={file} escapeHtml={false}/>)
+                    (<ReactMarkdown className='markdown-body' source={file} escapeHtml={false} />)
                     : <h4> (File Preview) </h4>
                 }
 
