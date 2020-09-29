@@ -8,30 +8,27 @@ interface IFile {
     isDir: boolean;
 }
 
-interface IFileSorted {
-    
-}
-
 const LoadReport: React.FC = () => {
 
     const [fileName, setFileName] = useState('');
     const [file, setFile] = useState('');
     const [data, setData] = useState<IFile[]>([]);
 
-    const [sortedFiles, setSortedFiles] = useState<any[]>([]);
+    //const [sortedFiles, setSortedFiles] = useState();
 
     let history = useHistory();
 
 
     useEffect(() => {
-        listFiles();
-    }, []);
+        listFiles();    
+    }, [])
 
-
+    
     useEffect(() => {
-        sortFiles();
-    }, [data]);
-
+        if(data.length > 0) {
+            sortFiles();
+        }
+    }, [data])
 
 
     const handleClickFile = async (fileNameToOpen: string) => {
@@ -96,8 +93,9 @@ const LoadReport: React.FC = () => {
     const sortFiles = () => {
         console.log(data);
 
-        var finalObj: any = [];
-
+        var finalObj: any = {};
+        //var finalObj: any[] = {};
+        
         var monthName = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
         data.forEach((file, index) => {
@@ -130,14 +128,31 @@ const LoadReport: React.FC = () => {
             }
             
         })
+        
 
-        //console.log(finalObj);
+        console.log(finalObj);
 
-        const obj = Object.assign({},finalObj);
+        //setSortedFiles(finalObj);
+        
+
+        /*
+        Object.keys(finalObj).map(item => {
+            console.log(item);
+        })
+        */
+
+        /*
+        var obj = Object.assign({},finalObj);
         console.log(obj);
         setSortedFiles(obj);
-   
+        */
         
+        /*
+        console.log('---');
+        obj = Object.keys(finalObj).map(item => {
+            console.log('--> ' + item);
+        });
+        */
     }
 
 
