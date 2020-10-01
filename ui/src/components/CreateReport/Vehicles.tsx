@@ -50,7 +50,7 @@ const Vehicle: React.FC<Props> = (props: Props) => {
                                     <datalist id="vehicles">
                                         {
                                             vehicleOptions.map((vehicle, index) => (
-                                                <option key={index}>{vehicle}</option>
+                                                <option key={index}>{vehicle.name}</option>
                                             ))
                                         }
                                     </datalist>

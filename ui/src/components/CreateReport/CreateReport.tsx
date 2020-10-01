@@ -16,6 +16,8 @@ import Weather from './Weather';
 import { Redirect } from 'react-router-dom';
 import socketIOClient from 'socket.io-client';
 
+import vehicleOptions from '../data/vehicles.json';
+
 import host from '../../../package.json';
 
 
@@ -392,13 +394,15 @@ class CreateReport extends React.Component<Props, State> {
 
 
     async handleDownloadFile() {
-        const data = await fetch('/download/' + this.state.fileName);
+        const zipFileName = this.state.fileName.substring(0, this.state.fileName.indexOf('.')) + '.zip';
+
+        const data = await fetch('/download/zip/' + this.state.fileName);
         const fileContent = await data.blob();
 
         var url = window.URL.createObjectURL(fileContent);
         var a = document.createElement('a');
         a.href = url;
-        a.download = this.state.fileName;
+        a.download = zipFileName;
         document.body.appendChild(a);
         a.click();
         a.remove();
@@ -406,6 +410,7 @@ class CreateReport extends React.Component<Props, State> {
 
     async handleDownloadPdf() {
         const pdfFileName = this.state.fileName.substring(0, this.state.fileName.indexOf('.')) + '.pdf';
+
         const data = await fetch('/download/pdf/' + this.state.fileName);
         const fileContent = await data.blob();
 
@@ -583,9 +588,24 @@ class CreateReport extends React.Component<Props, State> {
         let vehicles = [...this.state.vehicles];
         let item;
         if (dataType === 'name') {
-            item = {
-                ...vehicles[vehicleId],
-                name: value
+            var vehiclePhoneNumber;
+            vehicleOptions.forEach(vehicle => {
+                if (vehicle.name === value) {
+                    vehiclePhoneNumber = vehicle.phoneNumber;
+                }
+            })
+            if (vehiclePhoneNumber) {
+                item = {
+                    ...vehicles[vehicleId],
+                    name: value,
+                    phone_no: vehiclePhoneNumber
+                }
+            }
+            else {
+                item = {
+                    ...vehicles[vehicleId],
+                    name: value
+                }
             }
         }
         else if (dataType === 'phone_no') {

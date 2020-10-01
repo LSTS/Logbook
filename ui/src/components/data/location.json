@@ -1,0 +1,6 @@
+[
+    {"name": "FEUP", "contacts": [{"name":"user1", "phoneNumber": 911111}]},
+    {"name": "Esposende", "contacts": [{"name":"user1", "phoneNumber": 922222}]},
+    {"name": "Matosinhos", "contacts": [{"name":"user1", "phoneNumber": 933333}]},
+    {"name": "Leixões", "contacts": [{"name":"user1", "phoneNumber": 94444}]}
+]

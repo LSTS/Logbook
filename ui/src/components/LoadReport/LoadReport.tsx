@@ -61,13 +61,15 @@ const LoadReport: React.FC = () => {
 
 
     const handleDownloadFile = async () => {
-        const data = await fetch('/download/' + fileName);
+        const zipFileName = fileName.substring(0, fileName.indexOf('.')) + '.zip';
+
+        const data = await fetch('/download/zip/' + fileName);
         const fileContent = await data.blob();
 
         var url = window.URL.createObjectURL(fileContent);
         var a = document.createElement('a');
         a.href = url;
-        a.download = fileName;
+        a.download = zipFileName;
         document.body.appendChild(a);
         a.click();
         a.remove();
