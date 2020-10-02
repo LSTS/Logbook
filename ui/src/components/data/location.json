@@ -1,6 +1,24 @@
 [
-    {"name": "FEUP", "contacts": [{"name":"user1", "phoneNumber": 911111}]},
-    {"name": "Esposende", "contacts": [{"name":"user1", "phoneNumber": 922222}]},
-    {"name": "Matosinhos", "contacts": [{"name":"user1", "phoneNumber": 933333}]},
-    {"name": "Leixões", "contacts": [{"name":"user1", "phoneNumber": 94444}]}
+    {
+        "name": "FEUP",
+        "contacts": []
+    },
+    {
+        "name": "Esposende",
+        "contacts": []
+    },
+    {
+        "name": "APDL",
+        "contacts": [
+            {
+                "name": "Eng Sequeira",
+                "phoneNumber": "+351 967 949 269"
+            },
+            {
+                "name": "Piquere Capitania Leixões",
+                "phoneNumber": "+351 916 353 249"
+            }
+        ]
+    }
+   
 ]

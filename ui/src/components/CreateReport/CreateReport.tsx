@@ -17,6 +17,7 @@ import { Redirect } from 'react-router-dom';
 import socketIOClient from 'socket.io-client';
 
 import vehicleOptions from '../data/vehicles.json';
+import locationOption from '../data/location.json';
 
 import host from '../../../package.json';
 
@@ -483,9 +484,28 @@ class CreateReport extends React.Component<Props, State> {
 
     //--- Location
     handleChangeLocation(event: React.ChangeEvent<HTMLInputElement>) {
-        this.setState({
-            location: event.target.value
-        }, this.handleSocketUpdate);
+        var contacts: string = "";
+        locationOption.forEach(location => {
+            if (location.name === event.target.value) {
+                if (location.contacts.length > 0) {
+                    location.contacts.forEach(contact => {
+                        contacts += '* ' + contact.name + " - " + contact.phoneNumber + "\n";
+                    })
+                }
+            }
+        })
+
+        if (contacts.length > 0) {
+            this.setState({
+                location: event.target.value,
+                emergencyContacts: contacts
+            }, this.handleSocketUpdate);
+        }
+        else {
+            this.setState({
+                location: event.target.value
+            }, this.handleSocketUpdate);
+        }
     }
 
 
