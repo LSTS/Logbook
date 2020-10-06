@@ -8,27 +8,35 @@ interface IFile {
     isDir: boolean;
 }
 
+interface IVisibleYear {
+    year: string;
+    visible: boolean;
+}
+
 const LoadReport: React.FC = () => {
 
     const [fileName, setFileName] = useState('');
     const [file, setFile] = useState('');
     const [data, setData] = useState<IFile[]>([]);
 
-    //const [sortedFiles, setSortedFiles] = useState();
+    const [sortedFiles, setSortedFiles] = useState<any[]>([]);
+
+    const [visibleYear, setVisibleYear] = useState<IVisibleYear[]>([]);
 
     let history = useHistory();
 
 
     useEffect(() => {
-        listFiles();    
+        listFiles();
     }, [])
 
-    
+
     useEffect(() => {
-        if(data.length > 0) {
+        if (data.length > 0) {
             sortFiles();
         }
     }, [data])
+
 
 
     const handleClickFile = async (fileNameToOpen: string) => {
@@ -45,6 +53,23 @@ const LoadReport: React.FC = () => {
         }
     }
 
+    const handleClickYear = (yearToChange: string) => {
+
+        var listYear: any = [];
+
+        visibleYear.forEach(item => {
+            if (item.year === yearToChange) {
+                listYear.push({ year: item.year, visible: !item.visible })
+            }
+            else {
+                listYear.push({ year: item.year, visible: item.visible })
+            }
+        })
+
+        setVisibleYear(listYear)
+        //console.log(listYear);
+
+    }
 
     const listFiles = async () => {
         const dataFetched = await fetch('/file/');
@@ -93,68 +118,41 @@ const LoadReport: React.FC = () => {
 
 
     const sortFiles = () => {
-        console.log(data);
+        //console.log(data);
 
-        var finalObj: any = {};
-        //var finalObj: any[] = {};
-        
+        var list: any = [];
+
+        var byYearAndMonth: any = [];
         var monthName = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-        data.forEach((file, index) => {
+        data.forEach(file => {
             const fileDate = file.name.substring(11, file.name.length - 3);
-            //console.log(fileDate);
-
-            const fileYear = fileDate.split('-')[0];
+            const year = fileDate.split('-')[0];
             const fileMonth = fileDate.split('-')[1];
 
-            var year = parseInt(fileYear); 
             var month = monthName[parseInt(fileMonth)];
 
-            if( !finalObj[year] ) {
-                finalObj[year] = [];
-                if(!finalObj[year][month]) {
-                    finalObj[year][month] = [file.name];
-                }
-                else {
-                    finalObj[year][month].push(file.name);
-                }
+
+
+            if (typeof byYearAndMonth[year] === 'undefined') {
+                byYearAndMonth[year] = {};
+
+                list.push({ year: year, visible: true });
+
             }
-            else {
-                finalObj[year].push();
-                if(!finalObj[year][month]) {
-                    finalObj[year][month] = [file.name];
-                }
-                else {
-                    finalObj[year][month].push(file.name);
-                }
+
+            if (typeof byYearAndMonth[year][month] === 'undefined') {
+                byYearAndMonth[year][month] = [];
             }
-            
+
+            byYearAndMonth[year][month].push(file.name);
+
         })
-        
 
-        console.log(finalObj);
-
-        //setSortedFiles(finalObj);
-        
-
-        /*
-        Object.keys(finalObj).map(item => {
-            console.log(item);
-        })
-        */
-
-        /*
-        var obj = Object.assign({},finalObj);
-        console.log(obj);
-        setSortedFiles(obj);
-        */
-        
-        /*
-        console.log('---');
-        obj = Object.keys(finalObj).map(item => {
-            console.log('--> ' + item);
-        });
-        */
+        setSortedFiles(byYearAndMonth);
+        setVisibleYear(list);
+        //console.log(byYearAndMonth);
+        //console.log(list);
     }
 
 
@@ -163,16 +161,38 @@ const LoadReport: React.FC = () => {
         <div className="buttons-index">
 
             <div className="list-files">
-
                 {
-                    data.map((item, index) => (
-                        (fileName === item.name) ?
-                            (<span key={index} className="list-file-item-active" onClick={() => handleClickFile(item.name)}> &#128193; {item.name}  </span>)
-                            :
-                            (<span key={index} className="list-file-item" onClick={() => handleClickFile(item.name)}> &#128193; {item.name} </span>)
+                    Object.keys(sortedFiles).map((year: any, yearIndex) => (
+
+                        <div className={(visibleYear[year]) ? 'year' : 'year-hide'} key={yearIndex} onClick={() => handleClickYear(year)}>
+                            <h5 className="year-title" >{year}</h5>
+                            {
+                                Object.keys(sortedFiles[year]).map((month, monthIndex) => (
+                                    <div className="month" key={monthIndex}>
+                                        <h5 className="month-title">{month}</h5>
+                                        {
+                                            sortedFiles[year][month] ?
+                                                (
+                                                    <div className="files">
+                                                        {
+                                                            sortedFiles[year][month].map((i: any, fileIndex: any) => (
+                                                                (fileName === i) ?
+                                                                    (<span className="list-file-item-active fileName-title" key={fileIndex} onClick={() => handleClickFile(i)}> &#128193; {i} </span>)
+                                                                    :
+                                                                    (<span className="list-file-item fileName-title" key={fileIndex} onClick={() => handleClickFile(i)}> &#128193; {i} </span>)
+                                                            ))
+                                                        }
+                                                    </div>
+                                                )
+                                                :
+                                                (<></>)
+                                        }
+                                    </div>
+                                ))
+                            }
+                        </div>
                     ))
                 }
-
             </div>
 
             <hr />
@@ -198,7 +218,6 @@ const LoadReport: React.FC = () => {
                 }
 
             </div>
-
         </div>
     );
 }
