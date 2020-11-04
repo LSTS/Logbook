@@ -8,11 +8,6 @@ router.get('/', function (req, res, next) {
 
     var dirPath = path.join('../api/markdownFiles/', '');
 
-    /*
-    var appDir = path.dirname(require.main.filename);
-    console.log(appDir);
-    */
-
     var listFiles = [];
 
     fs.readdirSync(dirPath).forEach(file => {

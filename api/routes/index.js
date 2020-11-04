@@ -15,9 +15,21 @@ module.exports = router;
 
 
 module.exports = function (io) {
+
+  var reportsFolder = path.join('../api/markdownFiles/', '');
+  var imagesFolder = path.join('../api/uploads/', '');
+
+  if (!fs.existsSync(reportsFolder)) {
+    fs.mkdirSync(reportsFolder)
+  }
+
+  if (!fs.existsSync(imagesFolder)) {
+    fs.mkdirSync(imagesFolder)
+  }
+
+
   io.on('connection', function (socket) {
     console.log('New client connected');
-
 
     socket.on('update.file', data => {
       //console.log('[SOCKET] fileName : ' + data.fileName);
