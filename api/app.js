@@ -14,6 +14,7 @@ var editFileRouter = require('./routes/editFile');
 var downloadFile = require('./routes/downloadFile');
 var uploadImageRouter = require('./routes/uploadImage');
 var getImageRouter = require('./routes/getImage');
+var googleRouter = require('./routes/spreadsheet')
 
 var cors = require('cors');
 
@@ -36,6 +37,7 @@ app.use('/editFile', editFileRouter);
 app.use('/download', downloadFile);
 app.use('/uploadImage' , uploadImageRouter);
 app.use('/image' , getImageRouter);
+app.use('/google', googleRouter);
 
 
 // catch 404 and forward to error handler

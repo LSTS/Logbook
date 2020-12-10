@@ -18,6 +18,7 @@ module.exports = function (io) {
 
   var reportsFolder = path.join('../api/markdownFiles/', '');
   var imagesFolder = path.join('../api/uploads/', '');
+  var resourcesFolder = path.join('../api/resources/', '');
 
   if (!fs.existsSync(reportsFolder)) {
     fs.mkdirSync(reportsFolder)
@@ -27,6 +28,9 @@ module.exports = function (io) {
     fs.mkdirSync(imagesFolder)
   }
 
+  if (!fs.existsSync(resourcesFolder)) {
+    fs.mkdirSync(resourcesFolder)
+  }
 
   io.on('connection', function (socket) {
     console.log('New client connected');

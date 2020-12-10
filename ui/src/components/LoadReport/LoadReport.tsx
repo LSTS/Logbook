@@ -25,6 +25,7 @@ const LoadReport: React.FC = () => {
 
     let history = useHistory();
 
+    const [isWaitingSpreadsheet, setIsWaitingSpreadsheet] = useState(false);
 
     useEffect(() => {
         listFiles();
@@ -116,6 +117,25 @@ const LoadReport: React.FC = () => {
         a.remove();
     }
 
+    const handleSyncSpreadsheet = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    
+        setIsWaitingSpreadsheet(true)
+
+        const data = await fetch('/google/' + fileName);
+        const response = await data.json();
+
+        if(response === 'Spreadsheet updated'){
+            alert('Spreadsheet updated')
+        }
+        else if(response === 'Empty actions') {
+            alert('There are no actions')
+        }
+        else {
+            alert('Cannot update Spreadsheet.\nMake sure you have internet access.')
+        }
+
+        setIsWaitingSpreadsheet(false)
+    }
 
     const sortFiles = () => {
         //console.log(data);
@@ -209,6 +229,10 @@ const LoadReport: React.FC = () => {
 
                 {file ?
                     (<button className="download-pdf-file" onClick={handleDonwloadPdf}> &#11015; PDF </button>) : (<></>)
+                }
+
+                {file ?
+                    (<button className="sync-spreadsheet" disabled={isWaitingSpreadsheet} onClick={handleSyncSpreadsheet}> Sync with Google Spread sheet </button>) : (<></>)
                 }
 
 
