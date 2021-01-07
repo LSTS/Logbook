@@ -33,9 +33,42 @@ const LoadReport: React.FC = () => {
 
 
     useEffect(() => {
-        if (data.length > 0) {
-            sortFiles();
+        function sortFiles() {
+            //console.log(data);
+
+            var list: any = [];
+
+            var byYearAndMonth: any = [];
+            var monthName = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+            data.forEach(file => {
+                const fileDate = file.name.substring(11, file.name.length - 3);
+                const year = fileDate.split('-')[0];
+                const fileMonth = fileDate.split('-')[1];
+
+                var month = monthName[parseInt(fileMonth)];
+
+
+
+                if (typeof byYearAndMonth[year] === 'undefined') {
+                    byYearAndMonth[year] = {};
+
+                    list.push({ year: year, visible: true });
+
+                }
+
+                if (typeof byYearAndMonth[year][month] === 'undefined') {
+                    byYearAndMonth[year][month] = [];
+                }
+                byYearAndMonth[year][month].push(file.name);
+            })
+            setSortedFiles(byYearAndMonth);
+            setVisibleYear(list);
+            //console.log(byYearAndMonth);
+            //console.log(list);
         }
+
+        sortFiles()
     }, [data])
 
 
@@ -136,45 +169,6 @@ const LoadReport: React.FC = () => {
 
         setIsWaitingSpreadsheet(false)
     }
-
-    const sortFiles = () => {
-        //console.log(data);
-
-        var list: any = [];
-
-        var byYearAndMonth: any = [];
-        var monthName = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-        data.forEach(file => {
-            const fileDate = file.name.substring(11, file.name.length - 3);
-            const year = fileDate.split('-')[0];
-            const fileMonth = fileDate.split('-')[1];
-
-            var month = monthName[parseInt(fileMonth)];
-
-
-
-            if (typeof byYearAndMonth[year] === 'undefined') {
-                byYearAndMonth[year] = {};
-
-                list.push({ year: year, visible: true });
-
-            }
-
-            if (typeof byYearAndMonth[year][month] === 'undefined') {
-                byYearAndMonth[year][month] = [];
-            }
-
-            byYearAndMonth[year][month].push(file.name);
-
-        })
-
-        setSortedFiles(byYearAndMonth);
-        setVisibleYear(list);
-        //console.log(byYearAndMonth);
-        //console.log(list);
-    }
-
 
 
     return (

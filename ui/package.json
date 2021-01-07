@@ -24,7 +24,7 @@
     "uuid": "^8.3.0"
   },
   "scripts": {
-    "start": "bash setProxy.sh && react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -47,5 +47,5 @@
   "devDependencies": {
     "typescript": "^4.0.2"
   },
-  "proxy": "http://10.0.1.109:3001"
+  "proxy": "http://192.168.1.80:3001"
 }
