@@ -9,6 +9,7 @@ Logbooks can be edited simultaneously by multiple users.
 * npm (version >= 6)
 * [jq](https://stedolan.github.io/jq/)
 * [pm2](https://pm2.keymetrics.io/docs/usage/pm2-doc-single-page/)
+* [serve](https://www.npmjs.com/package/serve)
 
 ## Instalation
 * ./install.sh

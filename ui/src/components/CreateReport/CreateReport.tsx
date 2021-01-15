@@ -19,12 +19,10 @@ import socketIOClient from 'socket.io-client';
 import vehicleOptions from '../data/vehicles.json';
 import locationOption from '../data/location.json';
 
-import host from '../../../package.json';
+import packageJson from '../../../package.json';
+const API_URL = packageJson.proxy
 
-
-const ENDPOINT = host.proxy;
-const socket = socketIOClient(ENDPOINT);
-
+const socket = socketIOClient(API_URL);
 export { socket };
 
 interface IVehicle {
@@ -152,7 +150,7 @@ class CreateReport extends React.Component<Props, State> {
             fileDate = getCurrentDate();
         }
 
-        const response = await fetch('/editFile/' + fileName);
+        const response = await fetch(API_URL + '/editFile/' + fileName);
         const data = await response.json();
 
         if (data === 'Cannot find file') {
@@ -313,7 +311,7 @@ class CreateReport extends React.Component<Props, State> {
             headers: { 'Content-Type': 'application/json' }
         };
 
-        const response = await fetch('/createFile/' + fileName, requestOptions);
+        const response = await fetch(API_URL + '/createFile/' + fileName, requestOptions);
         const data = await response.text();
 
         if (data === 'File created') {
@@ -397,7 +395,7 @@ class CreateReport extends React.Component<Props, State> {
     async handleDownloadFile() {
         const zipFileName = this.state.fileName.substring(0, this.state.fileName.indexOf('.')) + '.zip';
 
-        const data = await fetch('/download/zip/' + this.state.fileName);
+        const data = await fetch(API_URL + '/download/zip/' + this.state.fileName);
         const fileContent = await data.blob();
 
         var url = window.URL.createObjectURL(fileContent);
@@ -412,7 +410,7 @@ class CreateReport extends React.Component<Props, State> {
     async handleDownloadPdf() {
         const pdfFileName = this.state.fileName.substring(0, this.state.fileName.indexOf('.')) + '.pdf';
 
-        const data = await fetch('/download/pdf/' + this.state.fileName);
+        const data = await fetch(API_URL + '/download/pdf/' + this.state.fileName);
         const fileContent = await data.blob();
 
         var url = window.URL.createObjectURL(fileContent);
@@ -559,11 +557,11 @@ class CreateReport extends React.Component<Props, State> {
                 body: formData
             };
 
-            const response = await fetch('/uploadImage/', requestOptions);
+            const response = await fetch(API_URL + '/uploadImage/', requestOptions);
             const data = await response.json();
 
             if (data.message) {
-                const imageEndpoint = host.proxy + '/image/' + data.fileName;
+                const imageEndpoint = API_URL + '/image/' + data.fileName;
 
                 this.setState({
                     weatherImage: imageEndpoint

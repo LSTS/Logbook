@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "npm run server & cd ../ui && npm start",
+    "start": "npm run server & cd ../ui && npm run deploy",
     "server": "node ./bin/www"
   },
   "dependencies": {

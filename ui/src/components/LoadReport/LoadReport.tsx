@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown/with-html'
 import { useHistory } from 'react-router';
 
+import packageJson from '../../../package.json';
+const API_URL = packageJson.proxy
 
 interface IFile {
     name: string;
@@ -76,7 +78,7 @@ const LoadReport: React.FC = () => {
     const handleClickFile = async (fileNameToOpen: string) => {
 
         if (fileName !== fileNameToOpen) {
-            const data = await fetch('/file/' + fileNameToOpen);
+            const data = await fetch(API_URL + '/file/' + fileNameToOpen);
             const fileContent = await data.text();
 
             setFile(fileContent);
@@ -106,7 +108,8 @@ const LoadReport: React.FC = () => {
     }
 
     const listFiles = async () => {
-        const dataFetched = await fetch('/file/');
+
+        const dataFetched = await fetch(API_URL + '/file/');
         const files = await dataFetched.text();
 
         var json = JSON.parse(files);
@@ -122,7 +125,7 @@ const LoadReport: React.FC = () => {
     const handleDownloadFile = async () => {
         const zipFileName = fileName.substring(0, fileName.indexOf('.')) + '.zip';
 
-        const data = await fetch('/download/zip/' + fileName);
+        const data = await fetch(API_URL + '/download/zip/' + fileName);
         const fileContent = await data.blob();
 
         var url = window.URL.createObjectURL(fileContent);
@@ -138,7 +141,7 @@ const LoadReport: React.FC = () => {
     const handleDonwloadPdf = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         const pdfFileName = fileName.substring(0, fileName.indexOf('.')) + '.pdf';
 
-        const data = await fetch('/download/pdf/' + fileName);
+        const data = await fetch(API_URL + '/download/pdf/' + fileName);
         const fileContent = await data.blob();
 
         var url = window.URL.createObjectURL(fileContent);
@@ -154,7 +157,7 @@ const LoadReport: React.FC = () => {
     
         setIsWaitingSpreadsheet(true)
 
-        const data = await fetch('/google/' + fileName);
+        const data = await fetch(API_URL + '/google/' + fileName);
         const response = await data.json();
 
         if(response === 'Spreadsheet updated'){

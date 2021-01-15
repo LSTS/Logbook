@@ -1,5 +1,8 @@
 import React, { useState, useRef } from 'react';
 
+import packageJson from '../../../package.json';
+const API_URL = packageJson.proxy
+
 interface Props {
     onClose: any;
 }
@@ -35,7 +38,7 @@ const CustomPrompt: React.FC<Props> = (props: Props) => {
         else if (fileName.startsWith('debriefing_') && fileName.endsWith('.md')) {
 
             //check file template
-            const dataFetched = await fetch('/file/exist/' + fileName);
+            const dataFetched = await fetch(API_URL + '/file/exist/' + fileName);
             const fileExist = await dataFetched.json();
             
             if(fileExist.result) {
