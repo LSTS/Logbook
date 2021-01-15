@@ -54,7 +54,7 @@ router.get('/zip/:fileName', function (req, res, next) {
                                         //change image data
                                         var weather = data.substring(data.indexOf('### Weather') + 16);
                                         weather = weather.substring(0, weather.indexOf('### Systems') - 3);
-                                        console.log('--> ' + weather);
+                                        //console.log('--> ' + weather);
 
                                         var imageName = weather.split('/').pop();
                                         var imagePath = './img/' + imageName;
@@ -89,7 +89,11 @@ router.get('/zip/:fileName', function (req, res, next) {
                                                                             else {
                                                                                 try {
                                                                                     fs.unlinkSync(fileDest);
-                                                                                    fs.rmdirSync(reportPath, { recursive: true });
+                                                                                    fs.rmdirSync(reportPath, { recursive: true }, (err) => {
+                                                                                        if (err) {
+                                                                                            throw err;
+                                                                                        }
+                                                                                    });
                                                                                 }
                                                                                 catch (err) {
                                                                                     console.log(err);
@@ -106,7 +110,6 @@ router.get('/zip/:fileName', function (req, res, next) {
                                             })
                                         }
                                         else {
-                                            console.log('Without image');
                                             const zipFile = new AdmZip();
                                             var fileDest = path.join('../api/markdownFiles/', reportName + '.zip');
 
@@ -121,7 +124,11 @@ router.get('/zip/:fileName', function (req, res, next) {
                                                 else {
                                                     try {
                                                         fs.unlinkSync(fileDest);
-                                                        fs.rmdirSync(reportPath, { recursive: true });
+                                                        fs.rmdirSync(reportPath, { recursive: true } , (err) => {
+                                                            if (err) {
+                                                                throw err;
+                                                            }   
+                                                        });
                                                     }
                                                     catch (err) {
                                                         console.log(err);
