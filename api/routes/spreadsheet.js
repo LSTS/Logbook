@@ -81,14 +81,16 @@ async function accessSpreadsheet(obj, date) {
 
         const sheet = doc.sheetsByIndex[0]
         const rows = await sheet.getRows()
-        var id = rows.length + 1
 
+        var id = rows.length + 1
+/*
         for (const action of obj.actions) {
             if (action.length > 0) {
                 await sheet.addRow([id, action, '', formatted_date, '', '', '', ''])
                 id++
             }
         }
+*/
 
         return 'success'
 

@@ -154,7 +154,6 @@ class CreateReport extends React.Component<Props, State> {
         const data = await response.json();
 
         if (data === 'Cannot find file') {
-            //console.log('File not found');
             this.createFile(fileName);
         }
         else if (data === 'Cannot read file') {
@@ -312,7 +311,7 @@ class CreateReport extends React.Component<Props, State> {
         };
 
         const response = await fetch(API_URL + '/createFile/' + fileName, requestOptions);
-        const data = await response.text();
+        const data: string = await response.text();
 
         if (data === 'File created') {
             console.log('File created');

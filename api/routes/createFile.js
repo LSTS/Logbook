@@ -5,7 +5,6 @@ var path = require('path');
 
 
 router.post('/:fileName', function (req, res, next) {
-    //console.log(req.body.data);
 
     var filePath = path.join('../api/markdownFiles/', req.params.fileName);
 
@@ -15,7 +14,7 @@ router.post('/:fileName', function (req, res, next) {
             res.send('File exist');
         }
         else {
-            fs.appendFile(filePath, req.body.data, function (err) {
+            fs.appendFile(filePath, req.params.fileName, function (err) {
                 if (err) {
                     throw err;
                 }
